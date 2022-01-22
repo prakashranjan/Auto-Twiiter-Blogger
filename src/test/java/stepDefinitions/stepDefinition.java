@@ -7,10 +7,8 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.messages.Messages;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import net.bytebuddy.dynamic.scaffold.MethodGraph;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -25,10 +23,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.awt.Robot;
 
@@ -55,7 +50,11 @@ public class stepDefinition {
                     .usingAnyFreePort()
                     .build();
             ChromeOptions options = new ChromeOptions();
+
+
             options.merge(capabilities);
+            options.addArguments("user-data-dir=C:/Users/praka/Documents/User Data");
+            options.addArguments("profile-directory=Profile 3");
             options.addExtensions (new File("C://Users//praka//Downloads//nbkknbagklenkcienihfapbfpjemnfoi.crx"));
             driver = new ChromeDriver(service, options);
             driver.manage().window().maximize();
@@ -80,38 +79,88 @@ public class stepDefinition {
     public void celeb_twitter_page_is_of_something(String strArg1) throws Throwable {
 
         driver.get("https://twitter.com/sachin_rt");
-        String TwitterTab=driver.getWindowHandle();
+        String TwitterTab = driver.getWindowHandle();
+        ((JavascriptExecutor) driver).executeScript("window.open()");
 
-        robot.keyPress(KeyEvent.VK_CONTROL);
-        robot.keyPress(KeyEvent.VK_T);
-
-        // CTRL+T is now pressed
-
-        robot.keyRelease(KeyEvent.VK_T);
-        robot.keyRelease(KeyEvent.VK_CONTROL);
-        ArrayList<String> tabs = new ArrayList<String> (driver.getWindowHandles());
+//
+        Thread.sleep(4000);
+        ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
         driver.switchTo().window(tabs.get(2));
         driver.get("https://www.blogger.com/go/signin");
-        String bloggerTab=driver.getWindowHandle();
+        String bloggerTab = driver.getWindowHandle();
 
         //login into blogger
+        List<WebElement> LoginProfile = driver.findElements(By.xpath("//div[@data-authuser='0']"));
+        if (!(LoginProfile.isEmpty())) {
+            for (WebElement p : LoginProfile) {
+                p.click();
+            }
+        }
 
+        String CelebFname = "Sachin Tendulkar";
+        String TweetTypeVal="Tweeted";
+        Set<String> Labels= new LinkedHashSet<>();
+        Labels.add("Sachin");
+        Labels.add("Tendulkar");
+        Labels.add("sachin_rt");
+        Labels.add("twitter");
+        Labels.add("tweet");
+
+        String LabelsString= String.join(",",Labels);
+
+
+        driver.findElement(By.xpath("//span[text()='New Post']")).click();
+        driver.findElement(By.xpath("(//input[@aria-label='Title'])[1]")).click();
+        driver.findElement(By.xpath("(//input[@aria-label='Title'])[1]")).sendKeys("Happy Birthday Kamblaya...-"+CelebFname+" "+TweetTypeVal);
+
+        String BlogHtmlContent = "<h3 style=\"text-align: left;\">&nbsp;Sachin Tendulkar Tweeted:</h3><p>Happy birthday Kamblya!</p><p>The innumerable memories we have had both on &amp; off the field are something I shall cherish forever.</p><p>Looking forward to hear from you on how 50 feels…\uD83D\uDE1C\uD83D\uDE0B</p><p>God bless you!</p><div class=\"separator\" style=\"clear: both; text-align: center;\"><a href=\"https://blogger.googleusercontent.com/img/a/AVvXsEiET3B5aP24bhpZqzTLTIe76VZ8SXHs1oJ05bFlmF0Uq2k8uiFYm4Gx7IvGw5fnleaqpRB6aiNBZP-9-ZkD6G9KmB4GMYC3MfPxqWc96Vavj58AJ2bso0qGed1w7rrJIBKigkm2w-P2g9pmOmnFLa7fmyp_R99gDRLejo4gYId6SmKpxKPu0Bh5sJs7CA=s1280\" imageanchor=\"1\" style=\"margin-left: 1em; margin-right: 1em;\"><img border=\"0\" data-original-height=\"720\" data-original-width=\"1280\" height=\"225\" src=\"https://blogger.googleusercontent.com/img/a/AVvXsEiET3B5aP24bhpZqzTLTIe76VZ8SXHs1oJ05bFlmF0Uq2k8uiFYm4Gx7IvGw5fnleaqpRB6aiNBZP-9-ZkD6G9KmB4GMYC3MfPxqWc96Vavj58AJ2bso0qGed1w7rrJIBKigkm2w-P2g9pmOmnFLa7fmyp_R99gDRLejo4gYId6SmKpxKPu0Bh5sJs7CA=w400-h225\" width=\"400\" /></a></div><br /><h4 style=\"text-align: left;\">Read more on twitter:</h4><p><br /></p> <blockquote class=\"twitter-tweet\"><p lang=\"en\" dir=\"ltr\">Happy birthday Kamblya!<br>The innumerable memories we have had both on &amp; off the field are something I shall cherish forever.<br><br>Looking forward to hear from you on how 50 feels…\uD83D\uDE1C\uD83D\uDE0B<br><br>God bless you! <a href=\"https://t.co/Tnx2rwJARa\">pic.twitter.com/Tnx2rwJARa</a></p>&mdash; Sachin Tendulkar (@sachin_rt) <a href=\"https://twitter.com/sachin_rt/status/1483331983262744578?ref_src=twsrc%5Etfw\">January 18, 2022</a></blockquote> <script async src=\"https://platform.twitter.com/widgets.js\" charset=\"utf-8\"></script>";
+
+//        driver.findElement(By.xpath("(//div/pre/span[@role='presentation'])[1]")).click();
+//        WebElement BlogBody = driver.findElement(By.xpath("(//div/pre/span[@role='presentation'])[1]"));
+//        ((JavascriptExecutor)driver).executeScript("arguments[0].innerText = '"+BlogHtmlContent+"'", BlogBody);
+
+//        driver.findElement(By.xpath("(//div/pre/span[@role='presentation'])[1]")).sendKeys(BlogHtmlContent);
+
+        driver.findElement(By.xpath("//div[contains(@class,'CodeMirror-wrap')]")).click();
+        driver.findElement(By.xpath("//div[contains(@class,'CodeMirror-wrap')]")).sendKeys(BlogHtmlContent);
+
+        driver.findElement(By.xpath("(//textarea[contains(@aria-label,'labels')])[1]")).click();
+        driver.findElement(By.xpath("(//textarea[contains(@aria-label,'labels')])[1]")).sendKeys(LabelsString);
+
+        driver.findElement(By.xpath("(//div[text()='Publish'])[1]")).click();
+//        driver.findElement(By.xpath("(//span[text()='Confirm'])[2]")).click();
+        Boolean BlogHomePageManageButtonPresence=driver.findElements(By.xpath("(//span[text()='Manage'])[2]")).size()>0;
+        if(BlogHomePageManageButtonPresence){
+
+            //do add db stuff
+
+        }else{
+            System.exit(0);
+        }
+
+
+
+
+
+        Thread.sleep(5000);
 
         driver.switchTo().window(TwitterTab);
 
+        Boolean LoginButtonPresent= driver.findElements(By.xpath("(//a[@href=\"/login\"])[1]")).size()>0;
 
 
-
+        if(LoginButtonPresent)
+        {
         driver.findElement(By.xpath("(//a[@href=\"/login\"])[1]")).click();
 //        Thread.sleep(3000);
         driver.findElement(By.xpath("//input[@autocomplete=\"username\"]")).sendKeys("prakashranjansingh04@gmail.com");
         driver.findElement(By.xpath("//span[text()='Next']")).click();
         Thread.sleep(5000);
-        List<WebElement> NumberCheckTab= driver.findElements(By.xpath("//input[@data-testId='ocfEnterTextTextInput']"));
+        List<WebElement> NumberCheckTab = driver.findElements(By.xpath("//input[@data-testId='ocfEnterTextTextInput']"));
 
 
-            if (!(NumberCheckTab.isEmpty())) {
-                for (WebElement m: NumberCheckTab) {
+        if (!(NumberCheckTab.isEmpty())) {
+            for (WebElement m : NumberCheckTab) {
                 m.sendKeys("9717065383");
                 driver.findElement(By.xpath("//span[text()='Next']")).click();
             }
@@ -126,8 +175,11 @@ public class stepDefinition {
 //        Thread.sleep(3000);
         driver.findElement(By.xpath("//span[text()='People']")).click();
 //        Thread.sleep(3000);
-        driver.findElement(By.xpath("(//a[@href='/"+strArg1+"'])[1]")).click();
+        driver.findElement(By.xpath("(//a[@href='/" + strArg1 + "'])[1]")).click();
 //        Thread.sleep(3000);
+
+
+    }
         driver.findElement(By.xpath("//span[text()='Tweets & replies']")).click();
 
 
