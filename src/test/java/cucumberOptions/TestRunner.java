@@ -8,9 +8,9 @@ import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        features = "src/test/java/features",
+        features = "src/test/java/features/celeb1.feature",
         glue = "stepDefinitions",
-        tags="@mobile",
+        tags="",
         dryRun = false,
         stepNotifications = true,
         monochrome = true,
