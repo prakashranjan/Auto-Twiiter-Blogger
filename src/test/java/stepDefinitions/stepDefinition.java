@@ -18,15 +18,17 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 
 import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.awt.Robot;
-
 
 
 public class stepDefinition {
@@ -115,20 +117,29 @@ public class stepDefinition {
 
         String BlogHtmlContent = "<h3 style=\"text-align: left;\">&nbsp;Sachin Tendulkar Tweeted:</h3><p>Happy birthday Kamblya!</p><p>The innumerable memories we have had both on &amp; off the field are something I shall cherish forever.</p><p>Looking forward to hear from you on how 50 feels…\uD83D\uDE1C\uD83D\uDE0B</p><p>God bless you!</p><div class=\"separator\" style=\"clear: both; text-align: center;\"><a href=\"https://blogger.googleusercontent.com/img/a/AVvXsEiET3B5aP24bhpZqzTLTIe76VZ8SXHs1oJ05bFlmF0Uq2k8uiFYm4Gx7IvGw5fnleaqpRB6aiNBZP-9-ZkD6G9KmB4GMYC3MfPxqWc96Vavj58AJ2bso0qGed1w7rrJIBKigkm2w-P2g9pmOmnFLa7fmyp_R99gDRLejo4gYId6SmKpxKPu0Bh5sJs7CA=s1280\" imageanchor=\"1\" style=\"margin-left: 1em; margin-right: 1em;\"><img border=\"0\" data-original-height=\"720\" data-original-width=\"1280\" height=\"225\" src=\"https://blogger.googleusercontent.com/img/a/AVvXsEiET3B5aP24bhpZqzTLTIe76VZ8SXHs1oJ05bFlmF0Uq2k8uiFYm4Gx7IvGw5fnleaqpRB6aiNBZP-9-ZkD6G9KmB4GMYC3MfPxqWc96Vavj58AJ2bso0qGed1w7rrJIBKigkm2w-P2g9pmOmnFLa7fmyp_R99gDRLejo4gYId6SmKpxKPu0Bh5sJs7CA=w400-h225\" width=\"400\" /></a></div><br /><h4 style=\"text-align: left;\">Read more on twitter:</h4><p><br /></p> <blockquote class=\"twitter-tweet\"><p lang=\"en\" dir=\"ltr\">Happy birthday Kamblya!<br>The innumerable memories we have had both on &amp; off the field are something I shall cherish forever.<br><br>Looking forward to hear from you on how 50 feels…\uD83D\uDE1C\uD83D\uDE0B<br><br>God bless you! <a href=\"https://t.co/Tnx2rwJARa\">pic.twitter.com/Tnx2rwJARa</a></p>&mdash; Sachin Tendulkar (@sachin_rt) <a href=\"https://twitter.com/sachin_rt/status/1483331983262744578?ref_src=twsrc%5Etfw\">January 18, 2022</a></blockquote> <script async src=\"https://platform.twitter.com/widgets.js\" charset=\"utf-8\"></script>";
 
-//        driver.findElement(By.xpath("(//div/pre/span[@role='presentation'])[1]")).click();
-//        WebElement BlogBody = driver.findElement(By.xpath("(//div/pre/span[@role='presentation'])[1]"));
-//        ((JavascriptExecutor)driver).executeScript("arguments[0].innerText = '"+BlogHtmlContent+"'", BlogBody);
+//
+//
+//        Thread.sleep(4000);
+        StringSelection selection = new StringSelection(BlogHtmlContent);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(selection, selection);
 
-//        driver.findElement(By.xpath("(//div/pre/span[@role='presentation'])[1]")).sendKeys(BlogHtmlContent);
+        WebElement BloggerPostFrame=driver.findElement(By.xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/c-wiz/div/div[2]/div/div/div[3]/span/div/div[2]/div[2]"));
+        actions.moveToElement(BloggerPostFrame).click().build().perform();
 
-        driver.findElement(By.xpath("//div[contains(@class,'CodeMirror-wrap')]")).click();
-        driver.findElement(By.xpath("//div[contains(@class,'CodeMirror-wrap')]")).sendKeys(BlogHtmlContent);
+        robot.keyPress(KeyEvent.VK_CONTROL);
+        robot.keyPress(KeyEvent.VK_V);
+        robot.keyRelease(KeyEvent.VK_V);
+        robot.keyRelease(KeyEvent.VK_CONTROL);
+
+        Thread.sleep(2000);
+
 
         driver.findElement(By.xpath("(//textarea[contains(@aria-label,'labels')])[1]")).click();
         driver.findElement(By.xpath("(//textarea[contains(@aria-label,'labels')])[1]")).sendKeys(LabelsString);
 
         driver.findElement(By.xpath("(//div[text()='Publish'])[1]")).click();
-//        driver.findElement(By.xpath("(//span[text()='Confirm'])[2]")).click();
+        driver.findElement(By.xpath("(//span[text()='Confirm'])[2]")).click();
         Boolean BlogHomePageManageButtonPresence=driver.findElements(By.xpath("(//span[text()='Manage'])[2]")).size()>0;
         if(BlogHomePageManageButtonPresence){
 
@@ -226,7 +237,7 @@ public class stepDefinition {
             for (WebElement y: TweetText){
                 String content=y.getText();
                 System.out.println(content);
-
+                String TweetFormatTextPart="<h3 style=\"text-align: left;\">&nbsp;Sachin Tendulkar Tweeted:</h3><p>Happy birthday Kamblya!</p><p>The innumerable memories we have had both on &amp; off the field are something I shall cherish forever.</p><p>Looking forward to hear from you on how 50 feels…\uD83D\uDE1C\uD83D\uDE0B</p><p>God bless you!</p><br /><h4 style=\"text-align: left;\">Read more on twitter:</h4><p><br /></p>";
             }
 
             System.out.println("-------------------------------------------------------------------------------------------------------------------");
