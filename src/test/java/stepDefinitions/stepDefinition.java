@@ -29,6 +29,8 @@ import java.net.URL;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class stepDefinition {
@@ -55,9 +57,9 @@ public class stepDefinition {
 
 
             options.merge(capabilities);
-            options.addArguments("user-data-dir=C:/Users/praka/Documents/User Data");
+            options.addArguments("user-data-dir=C:/Users/praka/Documents/ChromeAuto/User Data");
             options.addArguments("profile-directory=Profile 3");
-            options.addExtensions (new File("C://Users//praka//Downloads//nbkknbagklenkcienihfapbfpjemnfoi.crx"));
+//            options.addExtensions (new File("C://Users//praka//Downloads//nbkknbagklenkcienihfapbfpjemnfoi.crx"));
             driver = new ChromeDriver(service, options);
             driver.manage().window().maximize();
             driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -87,7 +89,7 @@ public class stepDefinition {
 //
         Thread.sleep(4000);
         ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
-        driver.switchTo().window(tabs.get(2));
+        driver.switchTo().window(tabs.get(1));
         driver.get("https://www.blogger.com/go/signin");
         String bloggerTab = driver.getWindowHandle();
 
@@ -99,9 +101,10 @@ public class stepDefinition {
             }
         }
 
+        Set<String> Labels= new LinkedHashSet<>();
         String CelebFname = "Sachin Tendulkar";
         String TweetTypeVal="Tweeted";
-        Set<String> Labels= new LinkedHashSet<>();
+
         Labels.add("Sachin");
         Labels.add("Tendulkar");
         Labels.add("sachin_rt");
@@ -111,43 +114,13 @@ public class stepDefinition {
         String LabelsString= String.join(",",Labels);
 
 
-        driver.findElement(By.xpath("//span[text()='New Post']")).click();
-        driver.findElement(By.xpath("(//input[@aria-label='Title'])[1]")).click();
-        driver.findElement(By.xpath("(//input[@aria-label='Title'])[1]")).sendKeys("Happy Birthday Kamblaya...-"+CelebFname+" "+TweetTypeVal);
 
-        String BlogHtmlContent = "<h3 style=\"text-align: left;\">&nbsp;Sachin Tendulkar Tweeted:</h3><p>Happy birthday Kamblya!</p><p>The innumerable memories we have had both on &amp; off the field are something I shall cherish forever.</p><p>Looking forward to hear from you on how 50 feels…\uD83D\uDE1C\uD83D\uDE0B</p><p>God bless you!</p><div class=\"separator\" style=\"clear: both; text-align: center;\"><a href=\"https://blogger.googleusercontent.com/img/a/AVvXsEiET3B5aP24bhpZqzTLTIe76VZ8SXHs1oJ05bFlmF0Uq2k8uiFYm4Gx7IvGw5fnleaqpRB6aiNBZP-9-ZkD6G9KmB4GMYC3MfPxqWc96Vavj58AJ2bso0qGed1w7rrJIBKigkm2w-P2g9pmOmnFLa7fmyp_R99gDRLejo4gYId6SmKpxKPu0Bh5sJs7CA=s1280\" imageanchor=\"1\" style=\"margin-left: 1em; margin-right: 1em;\"><img border=\"0\" data-original-height=\"720\" data-original-width=\"1280\" height=\"225\" src=\"https://blogger.googleusercontent.com/img/a/AVvXsEiET3B5aP24bhpZqzTLTIe76VZ8SXHs1oJ05bFlmF0Uq2k8uiFYm4Gx7IvGw5fnleaqpRB6aiNBZP-9-ZkD6G9KmB4GMYC3MfPxqWc96Vavj58AJ2bso0qGed1w7rrJIBKigkm2w-P2g9pmOmnFLa7fmyp_R99gDRLejo4gYId6SmKpxKPu0Bh5sJs7CA=w400-h225\" width=\"400\" /></a></div><br /><h4 style=\"text-align: left;\">Read more on twitter:</h4><p><br /></p> <blockquote class=\"twitter-tweet\"><p lang=\"en\" dir=\"ltr\">Happy birthday Kamblya!<br>The innumerable memories we have had both on &amp; off the field are something I shall cherish forever.<br><br>Looking forward to hear from you on how 50 feels…\uD83D\uDE1C\uD83D\uDE0B<br><br>God bless you! <a href=\"https://t.co/Tnx2rwJARa\">pic.twitter.com/Tnx2rwJARa</a></p>&mdash; Sachin Tendulkar (@sachin_rt) <a href=\"https://twitter.com/sachin_rt/status/1483331983262744578?ref_src=twsrc%5Etfw\">January 18, 2022</a></blockquote> <script async src=\"https://platform.twitter.com/widgets.js\" charset=\"utf-8\"></script>";
+
+//        String BlogHtmlContent = "<h3 style=\"text-align: left;\">&nbsp;Sachin Tendulkar Tweeted:</h3><p>Happy birthday Kamblya!</p><p>The innumerable memories we have had both on &amp; off the field are something I shall cherish forever.</p><p>Looking forward to hear from you on how 50 feels…\uD83D\uDE1C\uD83D\uDE0B</p><p>God bless you!</p><div class=\"separator\" style=\"clear: both; text-align: center;\"><a href=\"https://blogger.googleusercontent.com/img/a/AVvXsEiET3B5aP24bhpZqzTLTIe76VZ8SXHs1oJ05bFlmF0Uq2k8uiFYm4Gx7IvGw5fnleaqpRB6aiNBZP-9-ZkD6G9KmB4GMYC3MfPxqWc96Vavj58AJ2bso0qGed1w7rrJIBKigkm2w-P2g9pmOmnFLa7fmyp_R99gDRLejo4gYId6SmKpxKPu0Bh5sJs7CA=s1280\" imageanchor=\"1\" style=\"margin-left: 1em; margin-right: 1em;\"><img border=\"0\" data-original-height=\"720\" data-original-width=\"1280\" height=\"225\" src=\"https://blogger.googleusercontent.com/img/a/AVvXsEiET3B5aP24bhpZqzTLTIe76VZ8SXHs1oJ05bFlmF0Uq2k8uiFYm4Gx7IvGw5fnleaqpRB6aiNBZP-9-ZkD6G9KmB4GMYC3MfPxqWc96Vavj58AJ2bso0qGed1w7rrJIBKigkm2w-P2g9pmOmnFLa7fmyp_R99gDRLejo4gYId6SmKpxKPu0Bh5sJs7CA=w400-h225\" width=\"400\" /></a></div><br /><h4 style=\"text-align: left;\">Read more on twitter:</h4><p><br /></p> <blockquote class=\"twitter-tweet\"><p lang=\"en\" dir=\"ltr\">Happy birthday Kamblya!<br>The innumerable memories we have had both on &amp; off the field are something I shall cherish forever.<br><br>Looking forward to hear from you on how 50 feels…\uD83D\uDE1C\uD83D\uDE0B<br><br>God bless you! <a href=\"https://t.co/Tnx2rwJARa\">pic.twitter.com/Tnx2rwJARa</a></p>&mdash; Sachin Tendulkar (@sachin_rt) <a href=\"https://twitter.com/sachin_rt/status/1483331983262744578?ref_src=twsrc%5Etfw\">January 18, 2022</a></blockquote> <script async src=\"https://platform.twitter.com/widgets.js\" charset=\"utf-8\"></script>";
 
 //
 //
 //        Thread.sleep(4000);
-        StringSelection selection = new StringSelection(BlogHtmlContent);
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(selection, selection);
-
-        WebElement BloggerPostFrame=driver.findElement(By.xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/c-wiz/div/div[2]/div/div/div[3]/span/div/div[2]/div[2]"));
-        actions.moveToElement(BloggerPostFrame).click().build().perform();
-
-        robot.keyPress(KeyEvent.VK_CONTROL);
-        robot.keyPress(KeyEvent.VK_V);
-        robot.keyRelease(KeyEvent.VK_V);
-        robot.keyRelease(KeyEvent.VK_CONTROL);
-
-        Thread.sleep(2000);
-
-
-        driver.findElement(By.xpath("(//textarea[contains(@aria-label,'labels')])[1]")).click();
-        driver.findElement(By.xpath("(//textarea[contains(@aria-label,'labels')])[1]")).sendKeys(LabelsString);
-
-        driver.findElement(By.xpath("(//div[text()='Publish'])[1]")).click();
-        driver.findElement(By.xpath("(//span[text()='Confirm'])[2]")).click();
-        Boolean BlogHomePageManageButtonPresence=driver.findElements(By.xpath("(//span[text()='Manage'])[2]")).size()>0;
-        if(BlogHomePageManageButtonPresence){
-
-            //do add db stuff
-
-        }else{
-            System.exit(0);
-        }
 
 
 
@@ -199,6 +172,8 @@ public class stepDefinition {
 
 
         for (WebElement x: Tweets) {
+            driver.switchTo().window(TwitterTab);
+
             WebElement TweetDatetime = x.findElement(By.xpath(".//time[@datetime]"));
             String TweetDatetimeValue = TweetDatetime.getAttribute("datetime");
             TweetDatetimeValue = TweetDatetimeValue.replace(':', '$');
@@ -207,8 +182,10 @@ public class stepDefinition {
 
 
             List<WebElement> TweetImageThumbnails = x.findElements(By.xpath(".//img[@alt='Image']"));
-
+            Boolean TweetImageYes= false;
+            Boolean TweetVideoYes=false;
             if(!(TweetImageThumbnails.isEmpty())){
+                File OutputFolder = new File(".//target//tweetImages//" + strArg1);
             for (WebElement l :TweetImageThumbnails) {
 
                 l.click();
@@ -219,6 +196,7 @@ public class stepDefinition {
 
                 URL imageURL = new URL(logoSRC);
                 BufferedImage saveImage = ImageIO.read(imageURL);
+
                 File outputFile = new File(".//target//tweetImages//" + strArg1 + "//" + TweetDatetimeValue + ".jpg");
 
 
@@ -228,19 +206,107 @@ public class stepDefinition {
                 ModalCloseButton.click();
 
                 Thread.sleep(3000);
-            }}
+            }
+
+            TweetImageYes=true;
+            }
+
+
 
             List<WebElement> TweetText = x.findElements(By.xpath(".//div[contains(@id,'id__')]/span"));
 
+            StringBuilder TweetHtmlContent= new StringBuilder();
+            StringBuilder TweetRawContent= new StringBuilder();
 
-
+            TweetHtmlContent.append("<h3 style=\"text-align: left;\">&nbsp;"+CelebFname+" "+TweetTypeVal+":</h3>");
+            StringBuilder content= new StringBuilder();
             for (WebElement y: TweetText){
-                String content=y.getText();
-                System.out.println(content);
-                String TweetFormatTextPart="<h3 style=\"text-align: left;\">&nbsp;Sachin Tendulkar Tweeted:</h3><p>Happy birthday Kamblya!</p><p>The innumerable memories we have had both on &amp; off the field are something I shall cherish forever.</p><p>Looking forward to hear from you on how 50 feels…\uD83D\uDE1C\uD83D\uDE0B</p><p>God bless you!</p><br /><h4 style=\"text-align: left;\">Read more on twitter:</h4><p><br /></p>";
+
+                        TweetRawContent.append(y.getText());
+                        content.append("<p>"+y.getText()+"</p>");
+//                String TweetFormatTextPart="<p>Happy birthday Kamblya!</p><p>The innumerable memories we have had both on &amp; off the field are something I shall cherish forever.</p><p>Looking forward to hear from you on how 50 feels…\uD83D\uDE1C\uD83D\uDE0B</p><p>God bless you!</p><br /><h4 style=\"text-align: left;\">Read more on twitter:</h4><p><br /></p>";
+//
+
             }
 
-            System.out.println("-------------------------------------------------------------------------------------------------------------------");
+            TweetHtmlContent.append(content);
+            Pattern replace = Pattern.compile("\\n");
+            Matcher matcher = replace.matcher(TweetRawContent);
+            String TweetRawContentValue = matcher.replaceAll("");
+            System.out.println("1----"+TweetRawContentValue);
+            TweetRawContentValue=TweetRawContentValue.substring(0,50);
+            System.out.println("2-----"+TweetRawContentValue);
+
+            driver.switchTo().window(bloggerTab);
+            driver.navigate().refresh();
+            driver.findElement(By.xpath("//span[text()='New Post']")).click();
+            driver.findElement(By.xpath("(//input[@aria-label='Title'])[1]")).click();
+            driver.findElement(By.xpath("(//input[@aria-label='Title'])[1]")).sendKeys(TweetRawContentValue+"...-"+CelebFname+" "+TweetTypeVal);
+
+
+            String TweetHtmlContentValue= TweetHtmlContent.toString();
+            StringSelection selection = new StringSelection(TweetHtmlContentValue);
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(selection, selection);
+
+            WebElement BloggerPostFrame=driver.findElement(By.xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/c-wiz/div/div[2]/div/div/div[3]/span/div/div[2]/div[2]"));
+            actions.moveToElement(BloggerPostFrame).click().build().perform();
+
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_CONTROL);
+
+            Thread.sleep(2000);
+
+            if(TweetImageYes) {
+                driver.findElement(By.xpath("(//div[@aria-label='Insert image'])[3]")).click();
+                //image upload code
+                Thread.sleep(4000);
+                driver.findElement(By.xpath("//div[contains(@data-command,'imageUploadPicker')]/div[contains(text(),\"Upload from computer\")]")).click();
+                Thread.sleep(4000);
+                WebElement FrameUploadImage = driver.findElement(By.xpath("//iframe[@allow='camera']"));
+                driver.switchTo().frame(FrameUploadImage);
+
+                WebElement ChooseFileBtn= driver.findElement(By.xpath("//div[contains(text(),\'Choose files\')]"));
+                ChooseFileBtn.click();
+
+
+
+                Thread.sleep(4000);
+                driver.findElement(By.xpath("//div/input[@type='file']")).sendKeys("C://Users//praka//Pictures//wall//Florence-Italy-hd-wallpaper-iltwmt.jpg");
+
+
+                Thread.sleep(5000);
+                driver.findElement(By.xpath("//div[@role='button' and text()='Select']")).click();
+                Thread.sleep(5000);
+                driver.switchTo().parentFrame();
+                driver.findElement(By.xpath("//label[text()='Large']")).click();
+                driver.findElement(By.xpath("//label[contains(text(),'Center')]")).click();
+
+                driver.findElement(By.xpath("//span[text()='OK']")).click();
+                Thread.sleep(4000);
+
+
+
+            }
+
+            driver.findElement(By.xpath("(//textarea[contains(@aria-label,'labels')])[1]")).click();
+            driver.findElement(By.xpath("(//textarea[contains(@aria-label,'labels')])[1]")).sendKeys(LabelsString);
+
+            driver.findElement(By.xpath("(//div[text()='Publish'])[1]")).click();
+            driver.findElement(By.xpath("(//span[text()='Confirm'])[2]")).click();
+            Boolean BlogHomePageManageButtonPresence=driver.findElements(By.xpath("(//span[text()='Manage'])[2]")).size()>0;
+            if(BlogHomePageManageButtonPresence){
+
+                //do add db stuff
+
+            }else{
+                System.exit(0);
+            }
+
+
+
         }
 
         driver.findElement(By.xpath("//div[@aria-label=\"Account menu\"]")).click();
@@ -343,4 +409,19 @@ public class stepDefinition {
         //throw new PendingException();
     }
 
+    public static void deleteFolder(File folder) {
+        File[] files = folder.listFiles();
+        if(files!=null) { //some JVMs return null for empty dirs
+            for(File f: files) {
+                if(f.isDirectory()) {
+                    deleteFolder(f);
+                } else {
+                    f.delete();
+                }
+            }
+        }
+    }
+
+
 }
+
