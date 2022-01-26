@@ -11,7 +11,7 @@
         "steps": [
           {
             "result": {
-              "duration": 6227001400,
+              "duration": 4938314200,
               "status": "passed"
             },
             "line": 3,
@@ -30,11 +30,11 @@
         ]
       },
       {
-        "start_timestamp": "2022-01-25T20:59:57.965Z",
+        "start_timestamp": "2022-01-26T22:00:50.362Z",
         "before": [
           {
             "result": {
-              "duration": 7151500,
+              "duration": 7157600,
               "status": "passed"
             },
             "match": {
@@ -49,6 +49,7 @@
         "after": [
           {
             "result": {
+              "duration": 1000200,
               "status": "passed"
             },
             "match": {
@@ -61,9 +62,8 @@
         "steps": [
           {
             "result": {
-              "error_message": "org.openqa.selenium.ElementNotInteractableException: element not interactable\n  (Session info: chrome\u003d97.0.4692.99)\nBuild info: version: \u00273.14.0\u0027, revision: \u0027aacccce0\u0027, time: \u00272018-08-02T20:19:58.91Z\u0027\nSystem info: host: \u0027DIGLOO\u0027, ip: \u0027192.168.0.106\u0027, os.name: \u0027Windows 10\u0027, os.arch: \u0027amd64\u0027, os.version: \u002710.0\u0027, java.version: \u002711.0.12\u0027\nDriver info: org.openqa.selenium.chrome.ChromeDriver\nCapabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 97.0.4692.99, chrome: {chromedriverVersion: 96.0.4664.45 (76e4c1bb2ab46..., userDataDir: C:/Users/praka/Documents/Ch...}, goog:chromeOptions: {debuggerAddress: localhost:61219}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}\nSession ID: f4971a4dc3c7792779b136e2772fdb8d\r\n\tat java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)\r\n\tat java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)\r\n\tat java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)\r\n\tat java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:490)\r\n\tat org.openqa.selenium.remote.http.W3CHttpResponseCodec.createException(W3CHttpResponseCodec.java:187)\r\n\tat org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:122)\r\n\tat org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:49)\r\n\tat org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:158)\r\n\tat org.openqa.selenium.remote.service.DriverCommandExecutor.execute(DriverCommandExecutor.java:83)\r\n\tat org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:548)\r\n\tat org.openqa.selenium.remote.RemoteWebElement.execute(RemoteWebElement.java:276)\r\n\tat org.openqa.selenium.remote.RemoteWebElement.click(RemoteWebElement.java:83)\r\n\tat stepDefinitions.stepDefinition.celeb_twitter_page_is_of_something(stepDefinition.java:287)\r\n\tat ✽.Celeb twitter page is of \"sachin_rt\"(file:///C:/Users/praka/IdeaProjects/CucumberAuto/CucumberAuto/src/test/java/features/celeb1.feature:8)\r\n",
-              "duration": 125101053900,
-              "status": "failed"
+              "duration": 321555698700,
+              "status": "passed"
             },
             "line": 8,
             "name": "Celeb twitter page is of \"sachin_rt\"",
@@ -80,8 +80,8 @@
           },
           {
             "result": {
-              "duration": 1999500,
-              "status": "skipped"
+              "duration": 1998100,
+              "status": "passed"
             },
             "line": 9,
             "name": "User log in into application using \"joe\" and \"joe123\"",
@@ -102,8 +102,8 @@
           },
           {
             "result": {
-              "duration": 2000300,
-              "status": "skipped"
+              "duration": 998700,
+              "status": "passed"
             },
             "line": 10,
             "name": "Homepage is populated",
@@ -114,8 +114,8 @@
           },
           {
             "result": {
-              "duration": 1001800,
-              "status": "skipped"
+              "duration": 124993100,
+              "status": "passed"
             },
             "line": 11,
             "name": "Cards displayed \"true\"",

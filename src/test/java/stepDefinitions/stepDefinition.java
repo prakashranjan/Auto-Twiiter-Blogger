@@ -15,6 +15,9 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 import javax.imageio.ImageIO;
@@ -26,11 +29,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.thoughtworks.selenium.SeleneseTestNgHelper.assertEquals;
 
 
 public class stepDefinition {
@@ -185,7 +191,7 @@ public class stepDefinition {
             Boolean TweetImageYes= false;
             Boolean TweetVideoYes=false;
             if(!(TweetImageThumbnails.isEmpty())){
-                File OutputFolder = new File(".//target//tweetImages//" + strArg1);
+                File OutputFolder = new File(".//target//tweetImages//" + strArg1+"//Image");
             for (WebElement l :TweetImageThumbnails) {
 
                 l.click();
@@ -197,7 +203,7 @@ public class stepDefinition {
                 URL imageURL = new URL(logoSRC);
                 BufferedImage saveImage = ImageIO.read(imageURL);
 
-                File outputFile = new File(".//target//tweetImages//" + strArg1 + "//" + TweetDatetimeValue + ".jpg");
+                File outputFile = new File(".//target//tweetImages//" + strArg1 + "//Image//" + TweetDatetimeValue + ".jpg");
 
 
                 ImageIO.write(saveImage, "jpg", outputFile);
@@ -230,18 +236,32 @@ public class stepDefinition {
             }
 
             TweetHtmlContent.append(content);
+//            System.out.println("0---------"+TweetHtmlContent);
             Pattern replace = Pattern.compile("\\n");
             Matcher matcher = replace.matcher(TweetRawContent);
             String TweetRawContentValue = matcher.replaceAll("");
-            System.out.println("1----"+TweetRawContentValue);
-            TweetRawContentValue=TweetRawContentValue.substring(0,50);
-            System.out.println("2-----"+TweetRawContentValue);
+
+            byte[] bytes = TweetRawContentValue.getBytes(StandardCharsets.UTF_8);
+
+            String utf8EncodedTweetRawContentvalue = new String(bytes, StandardCharsets.UTF_8);
+
+            utf8EncodedTweetRawContentvalue=utf8EncodedTweetRawContentvalue.substring(0,50);
+
+
+
 
             driver.switchTo().window(bloggerTab);
             driver.navigate().refresh();
             driver.findElement(By.xpath("//span[text()='New Post']")).click();
-            driver.findElement(By.xpath("(//input[@aria-label='Title'])[1]")).click();
-            driver.findElement(By.xpath("(//input[@aria-label='Title'])[1]")).sendKeys(TweetRawContentValue+"...-"+CelebFname+" "+TweetTypeVal);
+            WebElement BlogTitleInput=driver.findElement(By.xpath("(//input[@aria-label='Title'])[1]"));
+            BlogTitleInput.click();
+
+
+
+
+            ((JavascriptExecutor) driver).executeScript("arguments[0].value='"+utf8EncodedTweetRawContentvalue+"...-"+CelebFname+" "+TweetTypeVal+"';",BlogTitleInput );
+
+//            driver.findElement(By.xpath("(//input[@aria-label='Title'])[1]")).sendKeys(utf8EncodedTweetRawContentvalue+"...-"+CelebFname+" "+TweetTypeVal);
 
 
             String TweetHtmlContentValue= TweetHtmlContent.toString();
@@ -267,29 +287,72 @@ public class stepDefinition {
                 Thread.sleep(4000);
                 WebElement FrameUploadImage = driver.findElement(By.xpath("//iframe[@allow='camera']"));
                 driver.switchTo().frame(FrameUploadImage);
+                File CelebImageFolder = new File(".//target//tweetImages//" + strArg1+"//Image");
+                File[] files = CelebImageFolder.listFiles();
+                if(files!=null) { //some JVMs r
+                    // return null for empty dirs
+                    for(File f: files) {
+                        WebElement ChooseFileBtn= driver.findElement(By.xpath("//div[contains(text(),\'Choose files\')]"));
 
-                WebElement ChooseFileBtn= driver.findElement(By.xpath("//div[contains(text(),\'Choose files\')]"));
-                ChooseFileBtn.click();
+                        ChooseFileBtn.click();
 
 
 
-                Thread.sleep(4000);
-                driver.findElement(By.xpath("//div/input[@type='file']")).sendKeys("C://Users//praka//Pictures//wall//Florence-Italy-hd-wallpaper-iltwmt.jpg");
+                        Thread.sleep(4000);
+                        driver.findElement(By.xpath("//div/input[@type='file']")).sendKeys(f.getAbsolutePath());
 
+                        Thread.sleep(8000);
 
-                Thread.sleep(5000);
-                driver.findElement(By.xpath("//div[@role='button' and text()='Select']")).click();
+                        robot.keyPress(KeyEvent.VK_ESCAPE);
+                        robot.keyRelease(KeyEvent.VK_ESCAPE);
+
+                    }
+                }
+
+                WebDriverWait wait = new WebDriverWait(driver,60);
+                WebElement SelectBtn=wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@role='button' and text()='Select']")));
+                SelectBtn.click();
+
                 Thread.sleep(5000);
                 driver.switchTo().parentFrame();
                 driver.findElement(By.xpath("//label[text()='Large']")).click();
                 driver.findElement(By.xpath("//label[contains(text(),'Center')]")).click();
 
-                driver.findElement(By.xpath("//span[text()='OK']")).click();
+                driver.findElement(By.xpath("(//span[text()='OK'])[2]")).click();
                 Thread.sleep(4000);
 
 
+                deleteFolder(CelebImageFolder);
+            }
+
+            StringBuilder EmbeddedTweetContent= new StringBuilder("<h4 style=\"text-align: left;\">Read more on twitter:</h4><p><br /></p>");
+
+            driver.switchTo().window(TwitterTab);
+            x.findElement(By.xpath(".//div[@aria-label='More']")).click();
+            driver.findElement(By.xpath("//span[text()='Embed Tweet']")).click();
+            Thread.sleep(5000);
+            Set<String> AllTabs=driver.getWindowHandles();
+            String EmbedTwitterTab;
+            for (String tabName:AllTabs){
+                if(!(tabName.equals(TwitterTab)) && !(tabName.equals(bloggerTab)) ){
+                    driver.switchTo().window(tabName);
+                    EmbedTwitterTab=driver.getWindowHandle();
+
+
+                }
 
             }
+
+            driver.findElement(By.xpath("//button[text()='Copy Code']")).click();
+            Thread.sleep(2000);
+            driver.close();
+            driver.switchTo().window(bloggerTab);
+            actions.moveToElement(BloggerPostFrame).click().build().perform();
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_CONTROL);
+
 
             driver.findElement(By.xpath("(//textarea[contains(@aria-label,'labels')])[1]")).click();
             driver.findElement(By.xpath("(//textarea[contains(@aria-label,'labels')])[1]")).sendKeys(LabelsString);
@@ -308,7 +371,7 @@ public class stepDefinition {
 
 
         }
-
+        driver.switchTo().window(TwitterTab);
         driver.findElement(By.xpath("//div[@aria-label=\"Account menu\"]")).click();
 //        Thread.sleep(3000);
         driver.findElement(By.xpath("//div[text()='Log out ']")).click();
