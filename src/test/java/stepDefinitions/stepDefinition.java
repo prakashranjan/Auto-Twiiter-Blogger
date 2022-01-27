@@ -68,7 +68,7 @@ public class stepDefinition {
 //            options.addExtensions (new File("C://Users//praka//Downloads//nbkknbagklenkcienihfapbfpjemnfoi.crx"));
             driver = new ChromeDriver(service, options);
             driver.manage().window().maximize();
-            driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+            driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
             actions = new Actions(driver);
             robot=new Robot();
 
@@ -88,7 +88,7 @@ public class stepDefinition {
     @Given("^Celeb twitter page is of \"([^\"]*)\"$")
     public void celeb_twitter_page_is_of_something(String strArg1) throws Throwable {
 
-        driver.get("https://twitter.com/sachin_rt");
+        driver.get("https://twitter.com/"+strArg1);
         String TwitterTab = driver.getWindowHandle();
         ((JavascriptExecutor) driver).executeScript("window.open()");
 
@@ -108,16 +108,15 @@ public class stepDefinition {
         }
 
         Set<String> Labels= new LinkedHashSet<>();
-        String CelebFname = "Sachin Tendulkar";
+        String CelebFname = "";
         String TweetTypeVal="Tweeted";
 
-        Labels.add("Sachin");
-        Labels.add("Tendulkar");
-        Labels.add("sachin_rt");
+
         Labels.add("twitter");
         Labels.add("tweet");
+        Labels.add(strArg1);
 
-        String LabelsString= String.join(",",Labels);
+        String LabelsString;
 
 
 
@@ -173,18 +172,25 @@ public class stepDefinition {
         driver.findElement(By.xpath("//span[text()='Tweets & replies']")).click();
 
 
-        Thread.sleep(10000);
+        Thread.sleep(5000);
         List<WebElement> Tweets= driver.findElements(By.xpath("//div[contains(@aria-label,'Tweets') and contains(@aria-label,'Timeline')]/div/div"));
 
 
         for (WebElement x: Tweets) {
             driver.switchTo().window(TwitterTab);
 
+            Boolean PinnedTweet=x.findElements(By.xpath(".//span[text()='Pinned Tweet']")).size()>0;
+            if(PinnedTweet){
+                continue;
+            }
             WebElement TweetDatetime = x.findElement(By.xpath(".//time[@datetime]"));
             String TweetDatetimeValue = TweetDatetime.getAttribute("datetime");
             TweetDatetimeValue = TweetDatetimeValue.replace(':', '$');
             TweetDatetimeValue = TweetDatetimeValue.replace('.', '#');
             TweetDatetimeValue = TweetDatetimeValue.replace('/', '@');
+
+            CelebFname=x.findElement(By.xpath(".//a[@href='/"+strArg1+"']/div/div/div/span/span")).getText();
+            Labels.add(CelebFname);
 
 
             List<WebElement> TweetImageThumbnails = x.findElements(By.xpath(".//img[@alt='Image']"));
@@ -244,8 +250,14 @@ public class stepDefinition {
             byte[] bytes = TweetRawContentValue.getBytes(StandardCharsets.UTF_8);
 
             String utf8EncodedTweetRawContentvalue = new String(bytes, StandardCharsets.UTF_8);
+            int CutValue= 50;
+            int TweetLength = utf8EncodedTweetRawContentvalue.length();
+            if(TweetLength<50){
+                CutValue=TweetLength;
+            }
 
-            utf8EncodedTweetRawContentvalue=utf8EncodedTweetRawContentvalue.substring(0,50);
+            utf8EncodedTweetRawContentvalue=utf8EncodedTweetRawContentvalue.substring(0,CutValue);
+
 
 
 
@@ -254,7 +266,8 @@ public class stepDefinition {
             driver.navigate().refresh();
             driver.findElement(By.xpath("//span[text()='New Post']")).click();
             WebElement BlogTitleInput=driver.findElement(By.xpath("(//input[@aria-label='Title'])[1]"));
-            BlogTitleInput.click();
+//            BlogTitleInput.click();
+            actions.moveToElement(BlogTitleInput).click().build().perform();
 
 
 
@@ -267,7 +280,8 @@ public class stepDefinition {
             String TweetHtmlContentValue= TweetHtmlContent.toString();
             StringSelection selection = new StringSelection(TweetHtmlContentValue);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            clipboard.setContents(selection, selection);
+            clipboard.setContents(selection,selection);
+
 
             WebElement BloggerPostFrame=driver.findElement(By.xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/c-wiz/div/div[2]/div/div/div[3]/span/div/div[2]/div[2]"));
             actions.moveToElement(BloggerPostFrame).click().build().perform();
@@ -327,6 +341,20 @@ public class stepDefinition {
 
             StringBuilder EmbeddedTweetContent= new StringBuilder("<h4 style=\"text-align: left;\">Read more on twitter:</h4><p><br /></p>");
 
+            String EmbeddedTweetContentValue= EmbeddedTweetContent.toString();
+            selection = new StringSelection(EmbeddedTweetContentValue);
+            clipboard.setContents(selection,selection);
+
+            actions.moveToElement(BloggerPostFrame).click().build().perform();
+
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_CONTROL);
+
+            Thread.sleep(2000);
+
+
             driver.switchTo().window(TwitterTab);
             x.findElement(By.xpath(".//div[@aria-label='More']")).click();
             driver.findElement(By.xpath("//span[text()='Embed Tweet']")).click();
@@ -353,7 +381,7 @@ public class stepDefinition {
             robot.keyRelease(KeyEvent.VK_V);
             robot.keyRelease(KeyEvent.VK_CONTROL);
 
-
+            LabelsString= String.join(",",Labels);
             driver.findElement(By.xpath("(//textarea[contains(@aria-label,'labels')])[1]")).click();
             driver.findElement(By.xpath("(//textarea[contains(@aria-label,'labels')])[1]")).sendKeys(LabelsString);
 
