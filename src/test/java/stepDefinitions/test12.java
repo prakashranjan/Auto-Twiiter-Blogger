@@ -1,6 +1,14 @@
 package stepDefinitions;
 
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.datetime.joda.LocalDateTimeParser;
+
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import static com.thoughtworks.selenium.SeleneseTestNgHelper.assertEquals;
 
@@ -18,5 +26,39 @@ public class test12 {
 
         assertEquals(rawString, utf8EncodedString);
         System.out.println(utf8EncodedString);
+
+
+
+        Date d= new Date();
+        Date p;
+        System.out.println(d);
+
+        LocalDateTime myDateObj = LocalDateTime.now();
+        System.out.println("Before formatting: " + myDateObj);
+
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+        String formattedDate = myDateObj.format(myFormatObj);
+        System.out.println("After formatting: " + formattedDate);
+        //Wed Feb 02 00:32:41 IST 2022
+        String Tdate ="2022-02-02T01:13:00.000Z";
+        Tdate= Tdate.substring(0,Tdate.length()-1);
+
+        LocalDateTime myDateObj2 = LocalDateTime.parse(Tdate);
+        System.out.println("Before formatting: " + myDateObj2);
+        DateTimeFormatter myFormatObj2 = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String formattedDate2 = myDateObj2.format(myFormatObj2);
+        System.out.println("After formatting: " + formattedDate2);
+
+        if(formattedDate2.compareToIgnoreCase(formattedDate)>0){
+            System.out.println("--> formatting: " + formattedDate2);
+        }
+        else{
+            System.out.println("---# formatting: " + formattedDate);
+        }
+
+
+
+
     }
 }

@@ -5,7 +5,7 @@ Feature:Celeb tweet data
 
   @mobile
   Scenario: twitter default login
-    Given Celeb twitter page is of "sachin_rt"
+    Given Celeb twitter page is of "ESPNcricinfo"
     When User log in into application using "joe" and "joe123"
     Then Homepage is populated
     And Cards displayed "true"

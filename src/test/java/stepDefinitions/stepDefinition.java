@@ -30,6 +30,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -66,6 +68,7 @@ public class stepDefinition {
             options.addArguments("user-data-dir=C:/Users/praka/Documents/ChromeAuto/User Data");
             options.addArguments("profile-directory=Profile 3");
 //            options.addExtensions (new File("C://Users//praka//Downloads//nbkknbagklenkcienihfapbfpjemnfoi.crx"));
+//            options.addArguments("--start-fullscreen");
             driver = new ChromeDriver(service, options);
             driver.manage().window().maximize();
             driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
@@ -106,6 +109,16 @@ public class stepDefinition {
                 p.click();
             }
         }
+
+
+
+        String dbDate ="2022-02-01T01:31:00.00";
+
+        LocalDateTime Dbdateobj = LocalDateTime.parse(dbDate);
+        DateTimeFormatter myFormatDateObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+        String DbdateStrval = Dbdateobj.format(myFormatDateObj);
+
 
         Set<String> Labels= new LinkedHashSet<>();
         String CelebFname = "";
@@ -183,8 +196,20 @@ public class stepDefinition {
             if(PinnedTweet){
                 continue;
             }
+
+            String TweetDate="";
             WebElement TweetDatetime = x.findElement(By.xpath(".//time[@datetime]"));
             String TweetDatetimeValue = TweetDatetime.getAttribute("datetime");
+            TweetDate=TweetDatetimeValue.substring(0,TweetDatetimeValue.length()-1);
+            LocalDateTime TweetDateCurVal = LocalDateTime.parse(TweetDate);
+
+            String tweetDateCurValueStr = TweetDateCurVal.format(myFormatDateObj);
+            System.out.println("After formatting: " + tweetDateCurValueStr);
+            if(tweetDateCurValueStr.compareToIgnoreCase(DbdateStrval)<0) {
+                break;
+            }
+
+
             TweetDatetimeValue = TweetDatetimeValue.replace(':', '$');
             TweetDatetimeValue = TweetDatetimeValue.replace('.', '#');
             TweetDatetimeValue = TweetDatetimeValue.replace('/', '@');
@@ -197,6 +222,16 @@ public class stepDefinition {
             Boolean TweetImageYes= false;
             Boolean TweetVideoYes=false;
             if(!(TweetImageThumbnails.isEmpty())){
+                File UserTargetDir= new File(".//target//tweetImages//"+ strArg1);
+
+                if(!(UserTargetDir.exists())) {
+                    File targetFolderImage = new File(".//target//tweetImages//" + strArg1 + "//Image");
+                    targetFolderImage.mkdirs();
+                    File targetFolderVideo = new File(".//target//tweetImages//" + strArg1 + "//Video");
+                    targetFolderVideo.mkdirs();
+                }
+
+
                 File OutputFolder = new File(".//target//tweetImages//" + strArg1+"//Image");
             for (WebElement l :TweetImageThumbnails) {
 
@@ -403,6 +438,8 @@ public class stepDefinition {
         driver.findElement(By.xpath("//div[@aria-label=\"Account menu\"]")).click();
 //        Thread.sleep(3000);
         driver.findElement(By.xpath("//div[text()='Log out ']")).click();
+
+        driver.close();
 
 
         //throw new PendingException();
