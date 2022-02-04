@@ -7,8 +7,10 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.messages.Messages;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import net.bytebuddy.dynamic.scaffold.MethodGraph;
 import org.openqa.selenium.*;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -24,6 +26,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -31,6 +34,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
@@ -56,11 +60,11 @@ public class stepDefinition {
             caps.setCapability("resolution", "1920x1080");
 
             DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-
-            ChromeDriverService service = new ChromeDriverService.Builder()
-                    .usingDriverExecutable(new File("C://Users//praka//Downloads//chromedriver_win32//chromedriver.exe"))
-                    .usingAnyFreePort()
-                    .build();
+            WebDriverManager.chromedriver().setup();
+//            ChromeDriverService service = new ChromeDriverService.Builder()
+//                    .usingDriverExecutable(new File("C://Users//praka//Downloads//chromedriver_win32//chromedriver.exe"))
+//                    .usingAnyFreePort()
+//                    .build();
             ChromeOptions options = new ChromeOptions();
 
 
@@ -69,7 +73,7 @@ public class stepDefinition {
             options.addArguments("profile-directory=Profile 3");
 //            options.addExtensions (new File("C://Users//praka//Downloads//nbkknbagklenkcienihfapbfpjemnfoi.crx"));
 //            options.addArguments("--start-fullscreen");
-            driver = new ChromeDriver(service, options);
+            driver = new ChromeDriver( options);
             driver.manage().window().maximize();
             driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
             actions = new Actions(driver);
@@ -112,7 +116,7 @@ public class stepDefinition {
 
 
 
-        String dbDate ="2022-02-01T01:31:00.00";
+        String dbDate ="2022-02-02T00:00:00.00";
 
         LocalDateTime Dbdateobj = LocalDateTime.parse(dbDate);
         DateTimeFormatter myFormatDateObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
@@ -144,7 +148,7 @@ public class stepDefinition {
 
 
 
-        Thread.sleep(5000);
+        Thread.sleep(2000);
 
         driver.switchTo().window(TwitterTab);
 
@@ -206,7 +210,11 @@ public class stepDefinition {
             String tweetDateCurValueStr = TweetDateCurVal.format(myFormatDateObj);
             System.out.println("After formatting: " + tweetDateCurValueStr);
             if(tweetDateCurValueStr.compareToIgnoreCase(DbdateStrval)<0) {
+                System.out.println("loop will break");
                 break;
+
+            }else{
+                System.out.println(tweetDateCurValueStr+" date is good");
             }
 
 
@@ -218,10 +226,14 @@ public class stepDefinition {
             Labels.add(CelebFname);
 
 
-            List<WebElement> TweetImageThumbnails = x.findElements(By.xpath(".//img[@alt='Image']"));
+
+            //div[@aria-roledescription='carousel']
+            //img[@alt='Image' and contains(@src,"=large")]
             Boolean TweetImageYes= false;
             Boolean TweetVideoYes=false;
-            if(!(TweetImageThumbnails.isEmpty())){
+            if( x.findElements(By.xpath(".//img[@alt='Image']")).size()>0){
+                x.findElement(By.xpath(".//img[@alt='Image']")).click();
+
                 File UserTargetDir= new File(".//target//tweetImages//"+ strArg1);
 
                 if(!(UserTargetDir.exists())) {
@@ -233,28 +245,51 @@ public class stepDefinition {
 
 
                 File OutputFolder = new File(".//target//tweetImages//" + strArg1+"//Image");
-            for (WebElement l :TweetImageThumbnails) {
-
-                l.click();
-
+                Boolean noImageLeft=false;
                 WebElement ImgModal = driver.findElement(By.xpath("//div[@aria-modal='true']"));
-                WebElement TweetFullImage = ImgModal.findElement(By.xpath(".//img[@alt='Image']"));
-                String logoSRC = TweetFullImage.getAttribute("src");
+                while(!noImageLeft) {
+//                Thread.sleep(10000);
 
-                URL imageURL = new URL(logoSRC);
-                BufferedImage saveImage = ImageIO.read(imageURL);
+//                driver.findElement(By.xpath("//img[@alt='Image' and contains(@src,\"=large\")]")).click();
+                    Boolean ImgModalRightArrow = driver.findElements(By.xpath("//div[@data-testid='Carousel-NavRight']")).size() > 0;
+                    if (ImgModalRightArrow) {
+                        driver.findElement(By.xpath("//div[@data-testid='Carousel-NavRight']")).click();
+                        Thread.sleep(3000);
+                    } else {
+                        noImageLeft = true;
+                    }
+                }
 
-                File outputFile = new File(".//target//tweetImages//" + strArg1 + "//Image//" + TweetDatetimeValue + ".jpg");
 
 
-                ImageIO.write(saveImage, "jpg", outputFile);
+                List<WebElement> TweetFullImage = driver.findElements(By.xpath("//div[@data-testid='swipe-to-dismiss']/div/div/div/img[@alt='Image']"));
+                for (WebElement carouselImg: TweetFullImage){
+                    System.out.println("----->"+carouselImg.getAttribute("src"));
+                    String logoSRC=carouselImg.getAttribute("src");
+                    URL imageURL = new URL(logoSRC);
+                    BufferedImage saveImage = ImageIO.read(imageURL);
+                    LocalDateTime CurTimeimg = LocalDateTime.now();
+                    String CurTimeImgVal = CurTimeimg.format(myFormatDateObj);
+
+
+
+                    CurTimeImgVal= CurTimeImgVal.replace(" ", "");
+                    CurTimeImgVal = CurTimeImgVal.replace(':', '$');
+                    CurTimeImgVal = CurTimeImgVal.replace('.', '#');
+                    CurTimeImgVal = CurTimeImgVal.replace('/', '@');
+
+
+                    File outputFile = new File(".//target//tweetImages//" + strArg1 + "//Image//" + CurTimeImgVal + ".jpg");
+
+
+                    ImageIO.write(saveImage, "jpg", outputFile);
+
+                }
+
+
 
                 WebElement ModalCloseButton = driver.findElement(By.xpath("//div[@aria-label='Close']"));
                 ModalCloseButton.click();
-
-                Thread.sleep(3000);
-            }
-
             TweetImageYes=true;
             }
 
@@ -285,13 +320,14 @@ public class stepDefinition {
             byte[] bytes = TweetRawContentValue.getBytes(StandardCharsets.UTF_8);
 
             String utf8EncodedTweetRawContentvalue = new String(bytes, StandardCharsets.UTF_8);
-            int CutValue= 50;
+
             int TweetLength = utf8EncodedTweetRawContentvalue.length();
-            if(TweetLength<50){
-                CutValue=TweetLength;
+            if(TweetLength>50){
+
+                utf8EncodedTweetRawContentvalue=utf8EncodedTweetRawContentvalue.substring(0,50);
             }
 
-            utf8EncodedTweetRawContentvalue=utf8EncodedTweetRawContentvalue.substring(0,CutValue);
+            System.out.println(utf8EncodedTweetRawContentvalue);
 
 
 
@@ -304,10 +340,11 @@ public class stepDefinition {
 //            BlogTitleInput.click();
             actions.moveToElement(BlogTitleInput).click().build().perform();
 
-
+            utf8EncodedTweetRawContentvalue= utf8EncodedTweetRawContentvalue.replace("\'","\\'");
 
 
             ((JavascriptExecutor) driver).executeScript("arguments[0].value='"+utf8EncodedTweetRawContentvalue+"...-"+CelebFname+" "+TweetTypeVal+"';",BlogTitleInput );
+            Thread.sleep(3000);
 
 //            driver.findElement(By.xpath("(//input[@aria-label='Title'])[1]")).sendKeys(utf8EncodedTweetRawContentvalue+"...-"+CelebFname+" "+TweetTypeVal);
 
@@ -319,6 +356,24 @@ public class stepDefinition {
 
 
             WebElement BloggerPostFrame=driver.findElement(By.xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/c-wiz/div/div[2]/div/div/div[3]/span/div/div[2]/div[2]"));
+
+            // code to click in center of screen
+
+            Dimension i = driver.manage().window().getSize();
+            System.out.println("Dimension x and y :"+i.getWidth()+" "+i.getHeight());
+            //3. Get the height and width of the screen
+            int xwidth = (i.getWidth()/2);
+            int yheight = (i.getHeight()/2);
+
+            robot.mouseMove(xwidth,yheight);
+
+            //Clicks Left mouse button
+
+            robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+            robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+
+
+
             actions.moveToElement(BloggerPostFrame).click().build().perform();
 
             robot.keyPress(KeyEvent.VK_CONTROL);
@@ -440,7 +495,8 @@ public class stepDefinition {
         driver.findElement(By.xpath("//div[text()='Log out ']")).click();
 
         driver.close();
-
+        driver.switchTo().window(bloggerTab);
+        driver.close();
 
         //throw new PendingException();
     }
@@ -497,7 +553,7 @@ public class stepDefinition {
     public void cards_displayed_something(String strArg1) throws Throwable {
         //throw new PendingException();
         System.out.println(strArg1);
-        driver.close();
+//        driver.close();
     }
     @Then("^User sign up with following details$")
     public void user_sign_up_with_following_details(DataTable data) throws Throwable {

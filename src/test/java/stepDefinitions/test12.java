@@ -1,6 +1,8 @@
 package stepDefinitions;
 
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.datetime.joda.LocalDateTimeParser;
 
@@ -9,6 +11,7 @@ import java.text.DateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import static com.thoughtworks.selenium.SeleneseTestNgHelper.assertEquals;
 
@@ -61,4 +64,20 @@ public class test12 {
 
 
     }
+
+
+//    protected boolean isElementHiddenNow(String id) {
+//        turnOffImplicitWaits();
+//        boolean result = ExpectedConditions.invisibilityOfElementLocated(By.id(id)).apply(driver);
+//        turnOnImplicitWaits();
+//        return result;
+//    }
+//
+//    private void turnOffImplicitWaits() {
+//        driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+//    }
+//
+//    private void turnOnImplicitWaits() {
+//        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+//    }
 }
