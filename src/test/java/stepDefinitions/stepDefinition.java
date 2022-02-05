@@ -503,6 +503,7 @@ public class stepDefinition {
         driver.close();
         driver.switchTo().window(bloggerTab);
         driver.close();
+        driver.quit();
 
         //throw new PendingException();
     }
