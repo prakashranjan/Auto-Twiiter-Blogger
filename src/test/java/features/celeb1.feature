@@ -3,12 +3,18 @@ Feature:Celeb tweet data
     Given "Chrome" browser is opened
 
 
-  @mobile
-  Scenario: twitter default login
-    Given Celeb twitter page is of "BCCI"
-    When User log in into application using "joe" and "joe123"
-    Then Homepage is populated
-    And Cards displayed "true"
+
+  Scenario Outline: twitter default login
+    Given Celeb twitter page is of <CelebId>
+    Examples:
+      | CelebId |
+      | BCCI |
+      | imVkohli |
+      | sachin_rt |
+      | virendersehwag |
+
+
+
 
 
 

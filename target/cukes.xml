@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?><testsuite errors="0" failures="0" name="io.cucumber.core.plugin.JUnitFormatter" skipped="0" tests="1" time="739.399">
-<testcase classname="Celeb tweet data" name="twitter default login" time="738.789">
+<?xml version="1.0" encoding="UTF-8"?><testsuite errors="0" failures="0" name="io.cucumber.core.plugin.JUnitFormatter" skipped="0" tests="1" time="457.233">
+<testcase classname="Celeb tweet data" name="twitter default login" time="456.765">
 <system-out><![CDATA[Given "Chrome" browser is opened............................................passed
-Given Celeb twitter page is of "BCCI".......................................passed
+Given Celeb twitter page is of "sachin_rt"..................................passed
 When User log in into application using "joe" and "joe123"..................passed
 Then Homepage is populated..................................................passed
 And Cards displayed "true"..................................................passed

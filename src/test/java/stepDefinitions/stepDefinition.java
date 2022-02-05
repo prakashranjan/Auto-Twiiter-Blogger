@@ -116,7 +116,7 @@ public class stepDefinition {
 
 
 
-        String dbDate ="2022-02-02T00:00:00.00";
+        String dbDate ="2022-02-05T00:00:00.00";
 
         LocalDateTime Dbdateobj = LocalDateTime.parse(dbDate);
         DateTimeFormatter myFormatDateObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
@@ -131,6 +131,9 @@ public class stepDefinition {
 
         Labels.add("twitter");
         Labels.add("tweet");
+        Labels.add("Sports");
+        Labels.add("Cricket");
+        Labels.add("India");
         Labels.add(strArg1);
 
         String LabelsString;
@@ -253,7 +256,10 @@ public class stepDefinition {
 //                driver.findElement(By.xpath("//img[@alt='Image' and contains(@src,\"=large\")]")).click();
                     Boolean ImgModalRightArrow = driver.findElements(By.xpath("//div[@data-testid='Carousel-NavRight']")).size() > 0;
                     if (ImgModalRightArrow) {
-                        driver.findElement(By.xpath("//div[@data-testid='Carousel-NavRight']")).click();
+
+                        WebDriverWait waitTime= new WebDriverWait(driver,10);
+                        WebElement rightArrowSymbol= waitTime.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@data-testid='Carousel-NavRight']")));
+                        rightArrowSymbol.click();
                         Thread.sleep(3000);
                     } else {
                         noImageLeft = true;
@@ -336,18 +342,18 @@ public class stepDefinition {
             driver.switchTo().window(bloggerTab);
             driver.navigate().refresh();
             driver.findElement(By.xpath("//span[text()='New Post']")).click();
-            WebElement BlogTitleInput=driver.findElement(By.xpath("(//input[@aria-label='Title'])[1]"));
-//            BlogTitleInput.click();
+            WebElement BlogTitleInput=driver.findElement(By.xpath("//input[@aria-label='Title']"));
+            BlogTitleInput.click();
             actions.moveToElement(BlogTitleInput).click().build().perform();
 
-            utf8EncodedTweetRawContentvalue= utf8EncodedTweetRawContentvalue.replace("\'","\\'");
+            utf8EncodedTweetRawContentvalue= utf8EncodedTweetRawContentvalue.replace("'","\'");
 
 
-            ((JavascriptExecutor) driver).executeScript("arguments[0].value='"+utf8EncodedTweetRawContentvalue+"...-"+CelebFname+" "+TweetTypeVal+"';",BlogTitleInput );
+//            ((JavascriptExecutor) driver).executeScript("arguments[0].value='"+utf8EncodedTweetRawContentvalue+"...-"+CelebFname+" "+TweetTypeVal+"';",BlogTitleInput );
+
+
+            driver.findElement(By.xpath("(//input[@aria-label='Title'])[1]")).sendKeys(utf8EncodedTweetRawContentvalue+"...-"+CelebFname+" "+TweetTypeVal);
             Thread.sleep(3000);
-
-//            driver.findElement(By.xpath("(//input[@aria-label='Title'])[1]")).sendKeys(utf8EncodedTweetRawContentvalue+"...-"+CelebFname+" "+TweetTypeVal);
-
 
             String TweetHtmlContentValue= TweetHtmlContent.toString();
             StringSelection selection = new StringSelection(TweetHtmlContentValue);
