@@ -11,7 +11,7 @@
         "steps": [
           {
             "result": {
-              "duration": 7593771500,
+              "duration": 9403245900,
               "status": "passed"
             },
             "line": 3,
@@ -30,199 +30,37 @@
         ]
       },
       {
-        "start_timestamp": "2022-02-05T15:19:18.111Z",
-        "line": 11,
+        "start_timestamp": "2022-02-08T15:35:44.469Z",
+        "line": 5,
         "name": "twitter default login",
         "description": "",
-        "id": "celeb-tweet-data;twitter-default-login;;2",
+        "id": "celeb-tweet-data;twitter-default-login",
         "type": "scenario",
-        "keyword": "Scenario Outline",
+        "keyword": "Scenario",
         "steps": [
           {
             "result": {
-              "duration": 483463539600,
+              "duration": 213949487100,
               "status": "passed"
             },
-            "line": 8,
-            "name": "Celeb twitter page is of \"BCCI\"",
+            "line": 6,
+            "name": "Celeb twitter page is open",
             "match": {
-              "arguments": [
-                {
-                  "val": "BCCI",
-                  "offset": 26
-                }
-              ],
-              "location": "stepDefinitions.stepDefinition.celeb_twitter_page_is_of_something(java.lang.String)"
+              "location": "stepDefinitions.stepDefinition.celeb_twitter_page_is_open()"
             },
             "keyword": "Given "
-          }
-        ]
-      },
-      {
-        "line": 2,
-        "name": "",
-        "description": "",
-        "type": "background",
-        "keyword": "Background",
-        "steps": [
+          },
           {
             "result": {
-              "duration": 3449855300,
+              "duration": 411953700,
               "status": "passed"
             },
-            "line": 3,
-            "name": "\"Chrome\" browser is opened",
+            "line": 7,
+            "name": "Close browser",
             "match": {
-              "arguments": [
-                {
-                  "val": "Chrome",
-                  "offset": 1
-                }
-              ],
-              "location": "stepDefinitions.stepDefinition.something_browser_is_opened(java.lang.String)"
+              "location": "stepDefinitions.stepDefinition.homepage_is_populated()"
             },
-            "keyword": "Given "
-          }
-        ]
-      },
-      {
-        "start_timestamp": "2022-02-05T15:27:29.404Z",
-        "line": 12,
-        "name": "twitter default login",
-        "description": "",
-        "id": "celeb-tweet-data;twitter-default-login;;3",
-        "type": "scenario",
-        "keyword": "Scenario Outline",
-        "steps": [
-          {
-            "result": {
-              "duration": 765855553600,
-              "status": "passed"
-            },
-            "line": 8,
-            "name": "Celeb twitter page is of \"imVkohli\"",
-            "match": {
-              "arguments": [
-                {
-                  "val": "imVkohli",
-                  "offset": 26
-                }
-              ],
-              "location": "stepDefinitions.stepDefinition.celeb_twitter_page_is_of_something(java.lang.String)"
-            },
-            "keyword": "Given "
-          }
-        ]
-      },
-      {
-        "line": 2,
-        "name": "",
-        "description": "",
-        "type": "background",
-        "keyword": "Background",
-        "steps": [
-          {
-            "result": {
-              "duration": 3269427700,
-              "status": "passed"
-            },
-            "line": 3,
-            "name": "\"Chrome\" browser is opened",
-            "match": {
-              "arguments": [
-                {
-                  "val": "Chrome",
-                  "offset": 1
-                }
-              ],
-              "location": "stepDefinitions.stepDefinition.something_browser_is_opened(java.lang.String)"
-            },
-            "keyword": "Given "
-          }
-        ]
-      },
-      {
-        "start_timestamp": "2022-02-05T15:40:18.727Z",
-        "line": 13,
-        "name": "twitter default login",
-        "description": "",
-        "id": "celeb-tweet-data;twitter-default-login;;4",
-        "type": "scenario",
-        "keyword": "Scenario Outline",
-        "steps": [
-          {
-            "result": {
-              "duration": 143828122000,
-              "status": "passed"
-            },
-            "line": 8,
-            "name": "Celeb twitter page is of \"sachin_rt\"",
-            "match": {
-              "arguments": [
-                {
-                  "val": "sachin_rt",
-                  "offset": 26
-                }
-              ],
-              "location": "stepDefinitions.stepDefinition.celeb_twitter_page_is_of_something(java.lang.String)"
-            },
-            "keyword": "Given "
-          }
-        ]
-      },
-      {
-        "line": 2,
-        "name": "",
-        "description": "",
-        "type": "background",
-        "keyword": "Background",
-        "steps": [
-          {
-            "result": {
-              "duration": 3209873000,
-              "status": "passed"
-            },
-            "line": 3,
-            "name": "\"Chrome\" browser is opened",
-            "match": {
-              "arguments": [
-                {
-                  "val": "Chrome",
-                  "offset": 1
-                }
-              ],
-              "location": "stepDefinitions.stepDefinition.something_browser_is_opened(java.lang.String)"
-            },
-            "keyword": "Given "
-          }
-        ]
-      },
-      {
-        "start_timestamp": "2022-02-05T15:42:45.838Z",
-        "line": 14,
-        "name": "twitter default login",
-        "description": "",
-        "id": "celeb-tweet-data;twitter-default-login;;5",
-        "type": "scenario",
-        "keyword": "Scenario Outline",
-        "steps": [
-          {
-            "result": {
-              "duration": 513717889800,
-              "status": "passed"
-            },
-            "line": 8,
-            "name": "Celeb twitter page is of \"virendersehwag\"",
-            "match": {
-              "arguments": [
-                {
-                  "val": "virendersehwag",
-                  "offset": 26
-                }
-              ],
-              "location": "stepDefinitions.stepDefinition.celeb_twitter_page_is_of_something(java.lang.String)"
-            },
-            "keyword": "Given "
+            "keyword": "Then "
           }
         ]
       }

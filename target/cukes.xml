@@ -1,22 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?><testsuite errors="0" failures="0" name="io.cucumber.core.plugin.JUnitFormatter" skipped="0" tests="4" time="1,925.077">
-<testcase classname="Celeb tweet data" name="twitter default login" time="491.264">
+<?xml version="1.0" encoding="UTF-8"?><testsuite errors="0" failures="0" name="io.cucumber.core.plugin.JUnitFormatter" skipped="0" tests="1" time="224.352">
+<testcase classname="Celeb tweet data" name="twitter default login" time="223.95">
 <system-out><![CDATA[Given "Chrome" browser is opened............................................passed
-Given Celeb twitter page is of "BCCI".......................................passed
-]]></system-out>
-</testcase>
-<testcase classname="Celeb tweet data" name="twitter default login 2" time="769.315">
-<system-out><![CDATA[Given "Chrome" browser is opened............................................passed
-Given Celeb twitter page is of "imVkohli"...................................passed
-]]></system-out>
-</testcase>
-<testcase classname="Celeb tweet data" name="twitter default login 3" time="147.102">
-<system-out><![CDATA[Given "Chrome" browser is opened............................................passed
-Given Celeb twitter page is of "sachin_rt"..................................passed
-]]></system-out>
-</testcase>
-<testcase classname="Celeb tweet data" name="twitter default login 4" time="516.934">
-<system-out><![CDATA[Given "Chrome" browser is opened............................................passed
-Given Celeb twitter page is of "virendersehwag".............................passed
+Given Celeb twitter page is open............................................passed
+Then Close browser..........................................................passed
 ]]></system-out>
 </testcase>
 </testsuite>
