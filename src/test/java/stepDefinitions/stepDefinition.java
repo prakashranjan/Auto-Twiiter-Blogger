@@ -436,7 +436,7 @@ public class stepDefinition {
                             Thread.sleep(1000);
                             driver.findElement(By.xpath("//div/input[@type='file']")).sendKeys(f.getAbsolutePath());
 
-                            Thread.sleep(4000);
+                            Thread.sleep(3000);
 
                             robot.keyPress(KeyEvent.VK_ESCAPE);
                             robot.keyRelease(KeyEvent.VK_ESCAPE);
