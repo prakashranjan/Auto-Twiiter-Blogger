@@ -104,7 +104,7 @@ public class stepDefinition {
 
     @Given("^Celeb twitter page is open$")
     public void celeb_twitter_page_is_open() throws Throwable {
-
+        int blogPostCount=0;
         ConnectionString connectionString = new ConnectionString("mongodb+srv://Tracker2:Ddd7856@cluster0.3jatg.mongodb.net/CelebTracker?retryWrites=true&w=majority");
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
@@ -117,37 +117,55 @@ public class stepDefinition {
         collection.countDocuments(filter);
 //        System.out.println("Connected");
 
-
-
-        
         Iterator<Document> itr = collection.find().iterator();
         mongoClient.close();
-        while (itr.hasNext()) {
 
+        String bloggerTab="";
+        String TwitterTab="";
+
+        driver.get("https://twitter.com/");
+        TwitterTab = driver.getWindowHandle();
+        ((JavascriptExecutor) driver).executeScript("window.open()");
+
+//            Thread.sleep(4000);
+        ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
+        driver.switchTo().window(tabs.get(1));
+        driver.get("https://www.blogger.com/");
+        bloggerTab = driver.getWindowHandle();
+
+
+        Boolean stopper=true;
+        while (itr.hasNext() && stopper) {
+//            stopper=false;
             Document dcur = itr.next();
 //            String strArg1 = dcur.get("TwitterUserId").toString();
 //            String dbDate = dcur.get("LastTweet").toString();
 
             String strArg1 = dcur.get("TwitterUserId").toString();
             String dbDate = dcur.get("LastTweet").toString();
+            Boolean Notification = (Boolean) dcur.get("Notification");
 
-
+            if(!Notification){
+                break;
+            }
 
 
             //db connect will be made and loop will execute
 
-
+            driver.switchTo().window(TwitterTab);
             driver.get("https://twitter.com/" + strArg1);
-            String TwitterTab = driver.getWindowHandle();
-            ((JavascriptExecutor) driver).executeScript("window.open()");
+            TwitterTab = driver.getWindowHandle();
+//            ((JavascriptExecutor) driver).executeScript("window.open()");
 
 //
 //            Thread.sleep(4000);
-            ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
-            driver.switchTo().window(tabs.get(1));
-            driver.get("https://www.blogger.com/go/signin");
-            String bloggerTab = driver.getWindowHandle();
+//            ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
+//            driver.switchTo().window(tabs.get(1));
+//            driver.get("https://www.blogger.com/go/signin");
+//            bloggerTab = driver.getWindowHandle();
 
+            driver.switchTo().window(bloggerTab);
+            implicitWaitOff();
             //login into blogger
             List<WebElement> LoginProfile = driver.findElements(By.xpath("//div[@data-authuser='0']"));
             if (!(LoginProfile.isEmpty())) {
@@ -155,7 +173,7 @@ public class stepDefinition {
                     p.click();
                 }
             }
-
+            implicitWaitOn();
 
 //        String dbDate = "2022-02-05T00:00:00.00";
 
@@ -175,6 +193,7 @@ public class stepDefinition {
             Labels.add("Sports");
             Labels.add("Cricket");
             Labels.add("India");
+
             Labels.add(strArg1);
 
             String LabelsString;
@@ -190,10 +209,11 @@ public class stepDefinition {
             Thread.sleep(1000);
 
             driver.switchTo().window(TwitterTab);
+            implicitWaitOff();
 
             Boolean LoginButtonPresent = driver.findElements(By.xpath("(//a[@href=\"/login\"])[1]")).size() > 0;
 
-
+            implicitWaitOn();
             if (LoginButtonPresent) {
                 driver.findElement(By.xpath("(//a[@href=\"/login\"])[1]")).click();
 //        Thread.sleep(3000);
@@ -233,11 +253,21 @@ public class stepDefinition {
 
             for (WebElement x : Tweets) {
                 driver.switchTo().window(TwitterTab);
-
+                implicitWaitOff();
                 Boolean PinnedTweet = x.findElements(By.xpath(".//span[text()='Pinned Tweet']")).size() > 0;
                 if (PinnedTweet) {
                     continue;
                 }
+
+                Boolean ReTweet = x.findElements(By.xpath(".//span[text()=\" Retweeted\"]")).size() > 0;
+                if (ReTweet) {
+                    CelebFname = x.findElement(By.xpath(".//span[@data-testId='socialContext']/span/span")).getText();
+
+                }else{
+                    CelebFname = x.findElement(By.xpath(".//a[@href='/" + strArg1 + "']/div/div/div/span/span")).getText();
+                }
+                Labels.add(CelebFname);
+                implicitWaitOn();
 
                 String TweetDate = "";
                 WebElement TweetDatetime = x.findElement(By.xpath(".//time[@datetime]"));
@@ -247,7 +277,8 @@ public class stepDefinition {
 
                 String tweetDateCurValueStr = TweetDateCurVal.format(myFormatDateObj);
 //                System.out.println("After formatting: " + tweetDateCurValueStr);
-                if (tweetDateCurValueStr.compareToIgnoreCase(DbdateStrval) < 0) {
+//                System.out.println(DbdateStrval+" and "+tweetDateCurValueStr);
+                if (DbdateStrval.compareToIgnoreCase(tweetDateCurValueStr) > 0) {
 //                    System.out.println("loop will break");
                     break;
 
@@ -260,15 +291,16 @@ public class stepDefinition {
                 TweetDatetimeValue = TweetDatetimeValue.replace('.', '#');
                 TweetDatetimeValue = TweetDatetimeValue.replace('/', '@');
 
-                CelebFname = x.findElement(By.xpath(".//a[@href='/" + strArg1 + "']/div/div/div/span/span")).getText();
-                Labels.add(CelebFname);
+
 
 
                 //div[@aria-roledescription='carousel']
                 //img[@alt='Image' and contains(@src,"=large")]
                 Boolean TweetImageYes = false;
                 Boolean TweetVideoYes = false;
+                implicitWaitOff();
                 if (x.findElements(By.xpath(".//img[@alt='Image']")).size() > 0) {
+                    implicitWaitOn();
                     x.findElement(By.xpath(".//img[@alt='Image']")).click();
 
                     File UserTargetDir = new File(".//target//tweetImages//" + strArg1);
@@ -284,14 +316,17 @@ public class stepDefinition {
                     File OutputFolder = new File(".//target//tweetImages//" + strArg1 + "//Image");
                     Boolean noImageLeft = false;
                     WebElement ImgModal = driver.findElement(By.xpath("//div[@aria-modal='true']"));
+                    WebElement ModalCloseButton = null;
                     while (!noImageLeft) {
 //                Thread.sleep(10000);
 
 //                driver.findElement(By.xpath("//img[@alt='Image' and contains(@src,\"=large\")]")).click();
+                        ModalCloseButton = driver.findElement(By.xpath("//div[@aria-label='Close']"));
+                        implicitWaitOff();
                         Boolean ImgModalRightArrow = driver.findElements(By.xpath("//div[@data-testid='Carousel-NavRight']")).size() > 0;
                         if (ImgModalRightArrow) {
 
-                            WebDriverWait waitTime = new WebDriverWait(driver, 10);
+                            WebDriverWait waitTime = new WebDriverWait(driver, 5);
                             WebElement rightArrowSymbol = waitTime.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@data-testid='Carousel-NavRight']")));
                             rightArrowSymbol.click();
                             Thread.sleep(2000);
@@ -299,7 +334,7 @@ public class stepDefinition {
                             noImageLeft = true;
                         }
                     }
-
+                    implicitWaitOn();
 
                     List<WebElement> TweetFullImage = driver.findElements(By.xpath("//div[@data-testid='swipe-to-dismiss']/div/div/div/img[@alt='Image']"));
                     for (WebElement carouselImg : TweetFullImage) {
@@ -325,12 +360,12 @@ public class stepDefinition {
                     }
 
 
-                    WebElement ModalCloseButton = driver.findElement(By.xpath("//div[@aria-label='Close']"));
+
                     ModalCloseButton.click();
                     TweetImageYes = true;
                 }
 
-
+                implicitWaitOn();
                 List<WebElement> TweetText = x.findElements(By.xpath(".//div[contains(@id,'id__')]/span"));
 
                 StringBuilder TweetHtmlContent = new StringBuilder();
@@ -372,6 +407,7 @@ public class stepDefinition {
                 WebElement BlogTitleInput = driver.findElement(By.xpath("//input[@aria-label='Title']"));
                 BlogTitleInput.click();
                 actions.moveToElement(BlogTitleInput).click().build().perform();
+
 
                 utf8EncodedTweetRawContentvalue = utf8EncodedTweetRawContentvalue.replace("'", "\'");
 
@@ -448,7 +484,7 @@ public class stepDefinition {
                     WebElement SelectBtn = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@role='button' and text()='Select']")));
                     SelectBtn.click();
 
-                    Thread.sleep(2000);
+                    Thread.sleep(4000);
                     driver.switchTo().parentFrame();
                     driver.findElement(By.xpath("//label[text()='Large']")).click();
                     driver.findElement(By.xpath("//label[contains(text(),'Center')]")).click();
@@ -510,7 +546,7 @@ public class stepDefinition {
                 driver.findElement(By.xpath("(//span[text()='Confirm'])[2]")).click();
                 Boolean BlogHomePageManageButtonPresence = driver.findElements(By.xpath("(//span[text()='Manage'])[2]")).size() > 0;
                 if (BlogHomePageManageButtonPresence) {
-
+                    blogPostCount+=1;
                     //do add db stuff
 
                 } else {
@@ -519,13 +555,13 @@ public class stepDefinition {
 
 
             }
-            driver.switchTo().window(TwitterTab);
-            driver.findElement(By.xpath("//div[@aria-label=\"Account menu\"]")).click();
-//        Thread.sleep(3000);
-            driver.findElement(By.xpath("//div[text()='Log out ']")).click();
+//            driver.switchTo().window(TwitterTab);
+//            driver.findElement(By.xpath("//div[@aria-label=\"Account menu\"]")).click();
+////        Thread.sleep(3000);
+//            driver.findElement(By.xpath("//div[text()='Log out ']")).click();
 
-            driver.close();
-            driver.switchTo().window(bloggerTab);
+//            driver.close();
+//            driver.switchTo().window(bloggerTab);
 //            driver.close();
 
 
@@ -552,6 +588,11 @@ public class stepDefinition {
             //throw new PendingException();
 
         }
+//
+        driver.switchTo().window(bloggerTab);
+            driver.close();
+        driver.switchTo().window(TwitterTab);
+        System.out.println("Total Blog Post Published: "+blogPostCount);
 
 
     }
@@ -583,6 +624,17 @@ public class stepDefinition {
             }
         }
     }
+
+    public void implicitWaitOn(){
+        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+    }
+    public void implicitWaitOff(){
+        driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+    }
+    public void implicitWaitLow(){
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+    }
+
 
 
 
