@@ -153,7 +153,7 @@ public class stepDefinition {
             //db connect will be made and loop will execute
 
             driver.switchTo().window(TwitterTab);
-            driver.get("https://twitter.com/" + strArg1);
+            driver.get("https://twitter.com/" + strArg1+"/with_replies");
             TwitterTab = driver.getWindowHandle();
 //            ((JavascriptExecutor) driver).executeScript("window.open()");
 
@@ -214,6 +214,7 @@ public class stepDefinition {
             Boolean LoginButtonPresent = driver.findElements(By.xpath("(//a[@href=\"/login\"])[1]")).size() > 0;
 
             implicitWaitOn();
+            WebElement WithRepliesBtn = driver.findElement(By.xpath("//span[text()='Tweets & replies']"));
             if (LoginButtonPresent) {
                 driver.findElement(By.xpath("(//a[@href=\"/login\"])[1]")).click();
 //        Thread.sleep(3000);
@@ -244,10 +245,11 @@ public class stepDefinition {
 
 
             }
-            driver.findElement(By.xpath("//span[text()='Tweets & replies']")).click();
+//            driver.findElement(By.xpath("//span[text()='Tweets & replies']")).click();
 
 
-            Thread.sleep(5000);
+            WebElement FourthTweet= driver.findElement(By.xpath("(//div[contains(@aria-label,'Tweets') and contains(@aria-label,'Timeline')]/div/div)[4]"));
+            Thread.sleep(2000);
             List<WebElement> Tweets = driver.findElements(By.xpath("//div[contains(@aria-label,'Tweets') and contains(@aria-label,'Timeline')]/div/div"));
 
 
@@ -363,6 +365,11 @@ public class stepDefinition {
 
                     ModalCloseButton.click();
                     TweetImageYes = true;
+                }else{
+
+                    System.out.println("--------------No image found");
+                    continue;
+
                 }
 
                 implicitWaitOn();
@@ -482,9 +489,10 @@ public class stepDefinition {
 
                     WebDriverWait wait = new WebDriverWait(driver, 60);
                     WebElement SelectBtn = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@role='button' and text()='Select']")));
+                    Thread.sleep(2000);
                     SelectBtn.click();
 
-                    Thread.sleep(4000);
+                    Thread.sleep(6000);
                     driver.switchTo().parentFrame();
                     driver.findElement(By.xpath("//label[text()='Large']")).click();
                     driver.findElement(By.xpath("//label[contains(text(),'Center')]")).click();
