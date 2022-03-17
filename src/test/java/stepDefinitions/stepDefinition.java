@@ -422,10 +422,14 @@ public class stepDefinition {
 
 //            ((JavascriptExecutor) driver).executeScript("arguments[0].value='"+utf8EncodedTweetRawContentvalue+"...-"+CelebFname+" "+TweetTypeVal+"';",BlogTitleInput );
 
+                try {
+                    driver.findElement(By.xpath("(//input[@aria-label='Title'])[1]")).sendKeys(utf8EncodedTweetRawContentvalue + "...-" + CelebFname + " " + TweetTypeVal);
+                    Thread.sleep(3000);
+                }
+                catch(WebDriverException e){
+                System.out.println("BMP error");
 
-                driver.findElement(By.xpath("(//input[@aria-label='Title'])[1]")).sendKeys(utf8EncodedTweetRawContentvalue + "...-" + CelebFname + " " + TweetTypeVal);
-                Thread.sleep(3000);
-
+                }
                 String TweetHtmlContentValue = TweetHtmlContent.toString();
                 StringSelection selection = new StringSelection(TweetHtmlContentValue);
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();

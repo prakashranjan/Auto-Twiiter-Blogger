@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><testsuite errors="0" failures="0" name="io.cucumber.core.plugin.JUnitFormatter" skipped="0" tests="1" time="140.815">
-<testcase classname="Celeb tweet data" name="twitter default login" time="140.424">
+<?xml version="1.0" encoding="UTF-8"?><testsuite errors="0" failures="0" name="io.cucumber.core.plugin.JUnitFormatter" skipped="0" tests="1" time="252.562">
+<testcase classname="Celeb tweet data" name="twitter default login" time="252.136">
 <system-out><![CDATA[Given "Chrome" browser is opened............................................passed
 Given Celeb twitter page is open............................................passed
 Then Close browser..........................................................passed

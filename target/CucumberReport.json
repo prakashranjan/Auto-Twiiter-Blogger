@@ -11,7 +11,7 @@
         "steps": [
           {
             "result": {
-              "duration": 7175288900,
+              "duration": 9698397700,
               "status": "passed"
             },
             "line": 3,
@@ -30,7 +30,7 @@
         ]
       },
       {
-        "start_timestamp": "2022-02-10T20:18:10.062Z",
+        "start_timestamp": "2022-03-17T19:34:06.080Z",
         "line": 5,
         "name": "twitter default login",
         "description": "",
@@ -40,7 +40,7 @@
         "steps": [
           {
             "result": {
-              "duration": 132409089600,
+              "duration": 242100889400,
               "status": "passed"
             },
             "line": 6,
@@ -52,7 +52,7 @@
           },
           {
             "result": {
-              "duration": 679212400,
+              "duration": 134363000,
               "status": "passed"
             },
             "line": 7,
