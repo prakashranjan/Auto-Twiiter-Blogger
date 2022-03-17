@@ -266,7 +266,8 @@ public class stepDefinition {
                     CelebFname = x.findElement(By.xpath(".//span[@data-testId='socialContext']/span/span")).getText();
 
                 }else{
-                    CelebFname = x.findElement(By.xpath(".//a[@href='/" + strArg1 + "']/div/div/div/span/span")).getText();
+                    CelebFname = x.findElement(By.xpath(".//a[@href='/" + strArg1 + "']/div/div/span/span")).getText();
+
                 }
                 Labels.add(CelebFname);
                 implicitWaitOn();
