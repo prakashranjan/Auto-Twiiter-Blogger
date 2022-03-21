@@ -16,11 +16,15 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.messages.Messages;
 import io.github.bonigarcia.wdm.WebDriverManager;
+
 import net.bytebuddy.dynamic.scaffold.MethodGraph;
 import org.bson.BsonDocument;
 import org.bson.Document;
+import org.eclipse.jetty.util.DateCache;
+import org.jsoup.Jsoup;
 import org.openqa.selenium.*;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -79,7 +83,7 @@ public class stepDefinition {
 
 
             options.merge(capabilities);
-            options.addArguments("user-data-dir=C:/Users/praka/Documents/ChromeAuto/User Data");
+            options.addArguments("user-data-dir=C:/Users/praka/Documents/ChromeAuto/User Data Dev");
             options.addArguments("profile-directory=Profile 3");
 //            options.addExtensions (new File("C://Users//praka//Downloads//nbkknbagklenkcienihfapbfpjemnfoi.crx"));
 //            options.addArguments("--start-fullscreen");
@@ -122,14 +126,25 @@ public class stepDefinition {
 
         String bloggerTab="";
         String TwitterTab="";
+        String InstagramTab="";
 
         driver.get("https://twitter.com/");
         TwitterTab = driver.getWindowHandle();
+
         ((JavascriptExecutor) driver).executeScript("window.open()");
 
 //            Thread.sleep(4000);
-        ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
-        driver.switchTo().window(tabs.get(1));
+        ArrayList<String> tabs1 = new ArrayList<String>(driver.getWindowHandles());
+        driver.switchTo().window(tabs1.get(1));
+        driver.get("https://www.instagram.com/");
+        InstagramTab = driver.getWindowHandle();
+
+
+        ((JavascriptExecutor) driver).executeScript("window.open()");
+
+//            Thread.sleep(4000);
+        ArrayList<String> tabs2 = new ArrayList<String>(driver.getWindowHandles());
+        driver.switchTo().window(tabs2.get(2));
         driver.get("https://www.blogger.com/");
         bloggerTab = driver.getWindowHandle();
 
@@ -378,8 +393,8 @@ public class stepDefinition {
 
                 StringBuilder TweetHtmlContent = new StringBuilder();
                 StringBuilder TweetRawContent = new StringBuilder();
-
-                TweetHtmlContent.append("<h3 style=\"text-align: left;\">&nbsp;" + CelebFname + " " + TweetTypeVal + ":</h3>");
+                String HeadingLine="<h3 style=\"text-align: left;\">&nbsp;" + CelebFname + " " + TweetTypeVal + ":</h3>";
+                TweetHtmlContent.append(HeadingLine);
                 StringBuilder content = new StringBuilder();
                 for (WebElement y : TweetText) {
 
@@ -494,10 +509,10 @@ public class stepDefinition {
 
                     WebDriverWait wait = new WebDriverWait(driver, 60);
                     WebElement SelectBtn = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@role='button' and text()='Select']")));
-                    Thread.sleep(2000);
+                    Thread.sleep(5000);
                     SelectBtn.click();
 
-                    Thread.sleep(6000);
+                    Thread.sleep(10000);
                     driver.switchTo().parentFrame();
                     driver.findElement(By.xpath("//label[text()='Large']")).click();
                     driver.findElement(By.xpath("//label[contains(text(),'Center')]")).click();
@@ -505,9 +520,113 @@ public class stepDefinition {
                     driver.findElement(By.xpath("(//span[text()='OK'])[2]")).click();
                     Thread.sleep(3000);
 
+                    //code for instagram post
+                    driver.switchTo().window(InstagramTab);
+
+                    driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='New Post']")).click();
+                    driver.findElement(By.xpath("//div/button[text()='Select from computer']")).click();
+
+                    if (files != null) { //some JVMs r
+                        // return null for empty dirs
+                        int t=1;
+                        for (File f : files) {
+                            if(t==2) {
+                                driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='Open Media Gallery']")).click();
+                                driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='Plus icon']")).click();
+                            }
+                            else if(t!=1){
+                                driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='Plus icon']")).click();
+                            }
+                            Thread.sleep(2000);
+//                            driver.findElement(By.xpath("//input[@type='file' and @multiple]")).sendKeys(f.getAbsolutePath());
+
+
+
+
+                            StringBuilder ImagePath = new StringBuilder(f.getAbsolutePath());
+
+                            String ImagePathValue = ImagePath.toString();
+                            selection = new StringSelection(ImagePathValue);
+                            clipboard.setContents(selection, selection);
+
+
+
+                            robot.keyPress(KeyEvent.VK_CONTROL);
+                            robot.keyPress(KeyEvent.VK_V);
+                            robot.keyRelease(KeyEvent.VK_V);
+                            robot.keyRelease(KeyEvent.VK_CONTROL);
+
+
+                            robot.keyPress(KeyEvent.VK_ENTER);
+                            robot.keyRelease(KeyEvent.VK_ENTER);
+
+                            Thread.sleep(2000);
+
+
+//                            robot.keyPress(KeyEvent.VK_ESCAPE);
+//                            robot.keyRelease(KeyEvent.VK_ESCAPE);
+                            t+=1;
+                        }
+                        driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='Select Crop']")).click();
+                        Thread.sleep(2000);
+                        driver.findElement(By.xpath("//div[text()='Original']")).click();
+                    }
+
+                    driver.findElement(By.xpath("//button[text()='Next']")).click();
+                    Thread.sleep(2000);
+                    driver.findElement(By.xpath("//button[text()='Next']")).click();
+
+                    String InstaPostTextAreaText= html2text(TweetHtmlContentValue);
+
+                    try {
+                        driver.findElement(By.xpath("//textarea[contains(@aria-label,'caption')]")).sendKeys(InstaPostTextAreaText);
+                    }
+                    catch(WebDriverException e){
+                        System.out.println("BMP error Instagram caption");
+
+                    }
+
+
+//                    for ( String LabelVal : Labels){
+//                        if(LabelVal.equalsIgnoreCase("tweet") || LabelVal.equalsIgnoreCase("Twitter")){
+//                            continue;
+//                        }
+//                        Random rand= new Random();
+//                        int xCo=rand.nextInt(30);
+//                        int yCo= rand.nextInt(30);
+//
+//
+//                        System.out.println("------------------"+xCo+"---"+yCo);
+//                        WebElement InstaPostDiv=driver.findElement(By.xpath("//img[@alt='Photo for tag placement']/following-sibling::div[@role='button']"));
+//                        actions.moveToElement(InstaPostDiv).build().perform();
+//                        actions.moveByOffset(xCo, yCo).click().build().perform();
+////                        actions.moveToElement(InstaPostDiv,rand.nextInt(),rand.nextInt()).click().perform();
+//
+//                            Boolean searchTag=driver.findElements(By.xpath("//input[@type='search']")).size()>0;
+//                            if (searchTag) {
+//                                driver.findElement(By.xpath("//input[@type='search']")).sendKeys(LabelVal);
+//                                Thread.sleep(2000);
+//                                driver.findElement(By.xpath("(//button/div/img[contains(@alt,'profile picture')])[1]")).click();
+//                            }
+//
+//                            Thread.sleep(1000);
+//
+//
+//                    }
+
+                    driver.findElement(By.xpath("//button[text()='Share']")).click();
+                    Boolean TickMark= driver.findElements(By.xpath("//h2[text()='Your post has been shared.']")).size()>0;
+                    if (!TickMark){
+                        System.out.println("Instagram post success without tagging ");
+                    }
+                    driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='Close']")).click();
+
+
 
                     deleteFolder(CelebImageFolder);
                 }
+
+                driver.switchTo().window(bloggerTab);
 
                 StringBuilder EmbeddedTweetContent = new StringBuilder("<h4 style=\"text-align: left;\">Read more on twitter:</h4><p><br /></p>");
 
@@ -606,6 +725,8 @@ public class stepDefinition {
             driver.close();
         driver.switchTo().window(TwitterTab);
         System.out.println("Total Blog Post Published: "+blogPostCount);
+        driver.close();
+        driver.switchTo().window(InstagramTab);
 
 
     }
@@ -646,6 +767,10 @@ public class stepDefinition {
     }
     public void implicitWaitLow(){
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+    }
+
+    public String html2text(String html) {
+        return Jsoup.parse(html).text();
     }
 
 
