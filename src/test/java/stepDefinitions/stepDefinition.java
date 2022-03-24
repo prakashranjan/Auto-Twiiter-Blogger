@@ -393,7 +393,7 @@ public class stepDefinition {
 
                 StringBuilder TweetHtmlContent = new StringBuilder();
                 StringBuilder TweetRawContent = new StringBuilder();
-                String HeadingLine="<h3 style=\"text-align: left;\">&nbsp;" + CelebFname + " " + TweetTypeVal + ":</h3>";
+                String HeadingLine="<h3 style=\"text-align: left;\">&nbsp;" + CelebFname + ":</h3>";
                 TweetHtmlContent.append(HeadingLine);
                 StringBuilder content = new StringBuilder();
                 for (WebElement y : TweetText) {
