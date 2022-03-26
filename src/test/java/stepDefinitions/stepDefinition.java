@@ -209,6 +209,7 @@ public class stepDefinition {
             Labels.add("Cricket");
             Labels.add("India");
 
+
             Labels.add(strArg1);
 
             String LabelsString;
@@ -575,15 +576,16 @@ public class stepDefinition {
                     driver.findElement(By.xpath("//button[text()='Next']")).click();
                     Thread.sleep(2000);
                     driver.findElement(By.xpath("//button[text()='Next']")).click();
+                    String DefaultTags = " #likes #like #follow #Cricket #CricketNews #RedNews";
+                    String InstaPostTextAreaText= html2text(TweetHtmlContentValue+DefaultTags);
 
-                    String InstaPostTextAreaText= html2text(TweetHtmlContentValue);
 
                     try {
                         driver.findElement(By.xpath("//textarea[contains(@aria-label,'caption')]")).sendKeys(InstaPostTextAreaText);
                     }
                     catch(WebDriverException e){
                         System.out.println("BMP error Instagram caption");
-
+                        driver.findElement(By.xpath("//textarea[contains(@aria-label,'caption')]")).sendKeys( CelebFname+" Update"+DefaultTags);
                     }
 
 
