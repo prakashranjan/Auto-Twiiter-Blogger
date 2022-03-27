@@ -344,7 +344,7 @@ public class stepDefinition {
                         implicitWaitOff();
                         Boolean ImgModalRightArrow = driver.findElements(By.xpath("//div[@data-testid='Carousel-NavRight']")).size() > 0;
                         if (ImgModalRightArrow) {
-
+                            Thread.sleep(2000);
                             WebDriverWait waitTime = new WebDriverWait(driver, 5);
                             WebElement rightArrowSymbol = waitTime.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@data-testid='Carousel-NavRight']")));
                             rightArrowSymbol.click();
@@ -576,7 +576,8 @@ public class stepDefinition {
                     driver.findElement(By.xpath("//button[text()='Next']")).click();
                     Thread.sleep(2000);
                     driver.findElement(By.xpath("//button[text()='Next']")).click();
-                    String DefaultTags = " #likes #like #follow #Cricket #CricketNews #RedNews";
+                    String CelebFnameHashtag= "#"+CelebFname.replaceAll("\\s", "");
+                    String DefaultTags = " #likes #like #follow #Cricket #CricketNews #RedNews "+CelebFnameHashtag;
                     String InstaPostTextAreaText= html2text(TweetHtmlContentValue+DefaultTags);
 
 
