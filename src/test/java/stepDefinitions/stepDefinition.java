@@ -293,12 +293,14 @@ public class stepDefinition {
                 String TweetDatetimeValue = TweetDatetime.getAttribute("datetime");
                 TweetDate = TweetDatetimeValue.substring(0, TweetDatetimeValue.length() - 1);
                 LocalDateTime TweetDateCurVal = LocalDateTime.parse(TweetDate);
-
+                TweetDateCurVal=TweetDateCurVal.plusHours(5);
+                TweetDateCurVal=TweetDateCurVal.plusMinutes(30);
                 String tweetDateCurValueStr = TweetDateCurVal.format(myFormatDateObj);
+
 //                System.out.println("After formatting: " + tweetDateCurValueStr);
-//                System.out.println(DbdateStrval+" and "+tweetDateCurValueStr);
+                System.out.println(DbdateStrval+" and "+tweetDateCurValueStr);
                 if (DbdateStrval.compareToIgnoreCase(tweetDateCurValueStr) > 0) {
-//                    System.out.println("loop will break");
+                    System.out.println("loop will break");
                     break;
 
                 } else {
