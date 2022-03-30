@@ -109,6 +109,8 @@ public class stepDefinition {
     @Given("^Celeb twitter page is open$")
     public void celeb_twitter_page_is_open() throws Throwable {
         int blogPostCount=0;
+        int instaPostCount=0;
+        Boolean BloggerNotWorking= false;
         ConnectionString connectionString = new ConnectionString("mongodb+srv://Tracker2:Ddd7856@cluster0.3jatg.mongodb.net/CelebTracker?retryWrites=true&w=majority");
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
@@ -270,6 +272,7 @@ public class stepDefinition {
 
 
             for (WebElement x : Tweets) {
+                String FullTweetDivText="";
                 driver.switchTo().window(TwitterTab);
                 implicitWaitOff();
                 Boolean PinnedTweet = x.findElements(By.xpath(".//span[text()='Pinned Tweet']")).size() > 0;
@@ -281,7 +284,7 @@ public class stepDefinition {
                 if (ReTweet) {
                     CelebFname = x.findElement(By.xpath(".//span[@data-testId='socialContext']/span/span")).getText();
 
-                }else{
+                } else {
                     CelebFname = x.findElement(By.xpath(".//a[@href='/" + strArg1 + "']/div/div/span/span")).getText();
 
                 }
@@ -293,12 +296,12 @@ public class stepDefinition {
                 String TweetDatetimeValue = TweetDatetime.getAttribute("datetime");
                 TweetDate = TweetDatetimeValue.substring(0, TweetDatetimeValue.length() - 1);
                 LocalDateTime TweetDateCurVal = LocalDateTime.parse(TweetDate);
-                TweetDateCurVal=TweetDateCurVal.plusHours(5);
-                TweetDateCurVal=TweetDateCurVal.plusMinutes(30);
+                TweetDateCurVal = TweetDateCurVal.plusHours(5);
+                TweetDateCurVal = TweetDateCurVal.plusMinutes(30);
                 String tweetDateCurValueStr = TweetDateCurVal.format(myFormatDateObj);
 
 //                System.out.println("After formatting: " + tweetDateCurValueStr);
-                System.out.println(DbdateStrval+" and "+tweetDateCurValueStr);
+                System.out.println(DbdateStrval + " and " + tweetDateCurValueStr);
                 if (DbdateStrval.compareToIgnoreCase(tweetDateCurValueStr) > 0) {
                     System.out.println("loop will break");
                     break;
@@ -311,8 +314,6 @@ public class stepDefinition {
                 TweetDatetimeValue = TweetDatetimeValue.replace(':', '$');
                 TweetDatetimeValue = TweetDatetimeValue.replace('.', '#');
                 TweetDatetimeValue = TweetDatetimeValue.replace('/', '@');
-
-
 
 
                 //div[@aria-roledescription='carousel']
@@ -381,10 +382,9 @@ public class stepDefinition {
                     }
 
 
-
                     ModalCloseButton.click();
                     TweetImageYes = true;
-                }else{
+                } else {
 
                     System.out.println("--------------No image found");
                     continue;
@@ -396,7 +396,7 @@ public class stepDefinition {
 
                 StringBuilder TweetHtmlContent = new StringBuilder();
                 StringBuilder TweetRawContent = new StringBuilder();
-                String HeadingLine="<h3 style=\"text-align: left;\">&nbsp;" + CelebFname + ":</h3>";
+                String HeadingLine = "<h3 style=\"text-align: left;\">&nbsp;" + CelebFname + ":</h3>";
                 TweetHtmlContent.append(HeadingLine);
                 StringBuilder content = new StringBuilder();
                 for (WebElement y : TweetText) {
@@ -406,6 +406,16 @@ public class stepDefinition {
 //                String TweetFormatTextPart="<p>Happy birthday Kamblya!</p><p>The innumerable memories we have had both on &amp; off the field are something I shall cherish forever.</p><p>Looking forward to hear from you on how 50 feels…\uD83D\uDE1C\uD83D\uDE0B</p><p>God bless you!</p><br /><h4 style=\"text-align: left;\">Read more on twitter:</h4><p><br /></p>";
 //
 
+                }
+
+                WebElement FullTweetDiv = x.findElement(By.xpath(".//div/div[@lang]"));
+
+                try {
+                    FullTweetDivText = html2text((String) ((JavascriptExecutor) driver).executeScript("return arguments[0].innerHTML;", FullTweetDiv));
+                    System.out.println(FullTweetDivText);
+                }
+                catch(Exception e){
+                    System.out.println("Full tweet text not working");
                 }
 
                 TweetHtmlContent.append(content);
@@ -429,100 +439,109 @@ public class stepDefinition {
 
                 driver.switchTo().window(bloggerTab);
                 driver.navigate().refresh();
-                driver.findElement(By.xpath("//span[text()='New Post']")).click();
-                WebElement BlogTitleInput = driver.findElement(By.xpath("//input[@aria-label='Title']"));
-                BlogTitleInput.click();
-                actions.moveToElement(BlogTitleInput).click().build().perform();
 
-
+                if(!BloggerNotWorking) {
+                    driver.findElement(By.xpath("//span[text()='New Post']")).click();
+                    try {
+                        WebElement BlogTitleInput = driver.findElement(By.xpath("//input[@aria-label='Title']"));
+                        BlogTitleInput.click();
+                        actions.moveToElement(BlogTitleInput).click().build().perform();
+                    } catch (NoSuchElementException e) {
+                        BloggerNotWorking = true;
+                    }
+                }
                 utf8EncodedTweetRawContentvalue = utf8EncodedTweetRawContentvalue.replace("'", "\'");
-
+                StringSelection selection;
+                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                String TweetHtmlContentValue = TweetHtmlContent.toString();
 
 //            ((JavascriptExecutor) driver).executeScript("arguments[0].value='"+utf8EncodedTweetRawContentvalue+"...-"+CelebFname+" "+TweetTypeVal+"';",BlogTitleInput );
+                if (!BloggerNotWorking) {
+                    try {
+                        driver.findElement(By.xpath("(//input[@aria-label='Title'])[1]")).sendKeys(utf8EncodedTweetRawContentvalue + "...-" + CelebFname + " " + TweetTypeVal);
+                        Thread.sleep(3000);
+                    } catch (WebDriverException e) {
+                        System.out.println("BMP error");
 
-                try {
-                    driver.findElement(By.xpath("(//input[@aria-label='Title'])[1]")).sendKeys(utf8EncodedTweetRawContentvalue + "...-" + CelebFname + " " + TweetTypeVal);
-                    Thread.sleep(3000);
-                }
-                catch(WebDriverException e){
-                System.out.println("BMP error");
-
-                }
-                String TweetHtmlContentValue = TweetHtmlContent.toString();
-                StringSelection selection = new StringSelection(TweetHtmlContentValue);
-                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                clipboard.setContents(selection, selection);
-
-
-                WebElement BloggerPostFrame = driver.findElement(By.xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/c-wiz/div/div[2]/div/div/div[3]/span/div/div[2]/div[2]"));
-
-                // code to click in center of screen
-
-                Dimension i = driver.manage().window().getSize();
-//                System.out.println("Dimension x and y :" + i.getWidth() + " " + i.getHeight());
-                //3. Get the height and width of the screen
-                int xwidth = (i.getWidth() / 2);
-                int yheight = (i.getHeight() / 2);
-
-                robot.mouseMove(xwidth, yheight);
-
-                //Clicks Left mouse button
-
-                robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-                robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-
-
-                actions.moveToElement(BloggerPostFrame).click().build().perform();
-
-                robot.keyPress(KeyEvent.VK_CONTROL);
-                robot.keyPress(KeyEvent.VK_V);
-                robot.keyRelease(KeyEvent.VK_V);
-                robot.keyRelease(KeyEvent.VK_CONTROL);
-
-                Thread.sleep(2000);
-
-                if (TweetImageYes) {
-                    driver.findElement(By.xpath("(//div[@aria-label='Insert image'])[3]")).click();
-                    //image upload code
-                    Thread.sleep(1000);
-                    driver.findElement(By.xpath("//div[contains(@data-command,'imageUploadPicker')]/div[contains(text(),\"Upload from computer\")]")).click();
-                    Thread.sleep(1000);
-                    WebElement FrameUploadImage = driver.findElement(By.xpath("//iframe[@allow='camera']"));
-                    driver.switchTo().frame(FrameUploadImage);
-                    File CelebImageFolder = new File(".//target//tweetImages//" + strArg1 + "//Image");
-                    File[] files = CelebImageFolder.listFiles();
-                    if (files != null) { //some JVMs r
-                        // return null for empty dirs
-                        for (File f : files) {
-                            WebElement ChooseFileBtn = driver.findElement(By.xpath("//div[contains(text(),\'Choose files\')]"));
-
-                            ChooseFileBtn.click();
-
-
-                            Thread.sleep(1000);
-                            driver.findElement(By.xpath("//div/input[@type='file']")).sendKeys(f.getAbsolutePath());
-
-                            Thread.sleep(3000);
-
-                            robot.keyPress(KeyEvent.VK_ESCAPE);
-                            robot.keyRelease(KeyEvent.VK_ESCAPE);
-
-                        }
                     }
 
-                    WebDriverWait wait = new WebDriverWait(driver, 60);
-                    WebElement SelectBtn = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@role='button' and text()='Select']")));
-                    Thread.sleep(5000);
-                    SelectBtn.click();
 
-                    Thread.sleep(10000);
-                    driver.switchTo().parentFrame();
-                    driver.findElement(By.xpath("//label[text()='Large']")).click();
-                    driver.findElement(By.xpath("//label[contains(text(),'Center')]")).click();
+                    selection = new StringSelection(TweetHtmlContentValue);
 
-                    driver.findElement(By.xpath("(//span[text()='OK'])[2]")).click();
-                    Thread.sleep(3000);
+                    clipboard.setContents(selection, selection);
 
+
+                    WebElement BloggerPostFrame = driver.findElement(By.xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/c-wiz/div/div[2]/div/div/div[3]/span/div/div[2]/div[2]"));
+
+                    // code to click in center of screen
+
+                    Dimension i = driver.manage().window().getSize();
+//                System.out.println("Dimension x and y :" + i.getWidth() + " " + i.getHeight());
+                    //3. Get the height and width of the screen
+                    int xwidth = (i.getWidth() / 2);
+                    int yheight = (i.getHeight() / 2);
+
+                    robot.mouseMove(xwidth, yheight);
+
+                    //Clicks Left mouse button
+
+                    robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                    robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+
+
+                    actions.moveToElement(BloggerPostFrame).click().build().perform();
+
+                    robot.keyPress(KeyEvent.VK_CONTROL);
+                    robot.keyPress(KeyEvent.VK_V);
+                    robot.keyRelease(KeyEvent.VK_V);
+                    robot.keyRelease(KeyEvent.VK_CONTROL);
+
+                    Thread.sleep(2000);
+                }
+                if (TweetImageYes) {
+                    File CelebImageFolder = new File(".//target//tweetImages//" + strArg1 + "//Image");
+                    File[] files = CelebImageFolder.listFiles();
+                    if (!BloggerNotWorking) {
+                        driver.findElement(By.xpath("(//div[@aria-label='Insert image'])[3]")).click();
+                        //image upload code
+                        Thread.sleep(1000);
+                        driver.findElement(By.xpath("//div[contains(@data-command,'imageUploadPicker')]/div[contains(text(),\"Upload from computer\")]")).click();
+                        Thread.sleep(1000);
+                        WebElement FrameUploadImage = driver.findElement(By.xpath("//iframe[@allow='camera']"));
+                        driver.switchTo().frame(FrameUploadImage);
+
+                        if (files != null) { //some JVMs r
+                            // return null for empty dirs
+                            for (File f : files) {
+                                WebElement ChooseFileBtn = driver.findElement(By.xpath("//div[contains(text(),\'Choose files\')]"));
+
+                                ChooseFileBtn.click();
+
+
+                                Thread.sleep(1000);
+                                driver.findElement(By.xpath("//div/input[@type='file']")).sendKeys(f.getAbsolutePath());
+
+                                Thread.sleep(3000);
+
+                                robot.keyPress(KeyEvent.VK_ESCAPE);
+                                robot.keyRelease(KeyEvent.VK_ESCAPE);
+
+                            }
+                        }
+
+                        WebDriverWait wait = new WebDriverWait(driver, 60);
+                        WebElement SelectBtn = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@role='button' and text()='Select']")));
+                        Thread.sleep(5000);
+                        SelectBtn.click();
+
+                        Thread.sleep(10000);
+                        driver.switchTo().parentFrame();
+                        driver.findElement(By.xpath("//label[text()='Large']")).click();
+                        driver.findElement(By.xpath("//label[contains(text(),'Center')]")).click();
+
+                        driver.findElement(By.xpath("(//span[text()='OK'])[2]")).click();
+                        Thread.sleep(3000);
+                    }
                     //code for instagram post
                     driver.switchTo().window(InstagramTab);
 
@@ -531,19 +550,16 @@ public class stepDefinition {
 
                     if (files != null) { //some JVMs r
                         // return null for empty dirs
-                        int t=1;
+                        int t = 1;
                         for (File f : files) {
-                            if(t==2) {
+                            if (t == 2) {
                                 driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='Open Media Gallery']")).click();
                                 driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='Plus icon']")).click();
-                            }
-                            else if(t!=1){
+                            } else if (t != 1) {
                                 driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='Plus icon']")).click();
                             }
                             Thread.sleep(2000);
 //                            driver.findElement(By.xpath("//input[@type='file' and @multiple]")).sendKeys(f.getAbsolutePath());
-
-
 
 
                             StringBuilder ImagePath = new StringBuilder(f.getAbsolutePath());
@@ -551,7 +567,6 @@ public class stepDefinition {
                             String ImagePathValue = ImagePath.toString();
                             selection = new StringSelection(ImagePathValue);
                             clipboard.setContents(selection, selection);
-
 
 
                             robot.keyPress(KeyEvent.VK_CONTROL);
@@ -568,7 +583,7 @@ public class stepDefinition {
 
 //                            robot.keyPress(KeyEvent.VK_ESCAPE);
 //                            robot.keyRelease(KeyEvent.VK_ESCAPE);
-                            t+=1;
+                            t += 1;
                         }
                         driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='Select Crop']")).click();
                         Thread.sleep(2000);
@@ -578,17 +593,22 @@ public class stepDefinition {
                     driver.findElement(By.xpath("//button[text()='Next']")).click();
                     Thread.sleep(2000);
                     driver.findElement(By.xpath("//button[text()='Next']")).click();
-                    String CelebFnameHashtag= "#"+CelebFname.replaceAll("\\s", "");
-                    String DefaultTags = " #likes #like #follow #Cricket #CricketNews #RedNews "+CelebFnameHashtag;
-                    String InstaPostTextAreaText= html2text(TweetHtmlContentValue+DefaultTags);
+                    String CelebFnameHashtag = "#" + CelebFname.replaceAll("\\s", "");
+                    String DefaultTags = " #likes #like #follow #Cricket #CricketNews #RedNews " + CelebFnameHashtag;
+                    String InstaPostTextAreaText="";
+                    if(FullTweetDivText.isEmpty()) {
+                        InstaPostTextAreaText = html2text(TweetHtmlContentValue + DefaultTags);
+                    }else{
+
+                        InstaPostTextAreaText = CelebFname +": " +FullTweetDivText+DefaultTags;
+                    }
 
 
                     try {
                         driver.findElement(By.xpath("//textarea[contains(@aria-label,'caption')]")).sendKeys(InstaPostTextAreaText);
-                    }
-                    catch(WebDriverException e){
+                    } catch (WebDriverException e) {
                         System.out.println("BMP error Instagram caption");
-                        driver.findElement(By.xpath("//textarea[contains(@aria-label,'caption')]")).sendKeys( CelebFname+" Update"+DefaultTags);
+                        driver.findElement(By.xpath("//textarea[contains(@aria-label,'caption')]")).sendKeys(CelebFname + " Update" + DefaultTags);
                     }
 
 
@@ -620,77 +640,81 @@ public class stepDefinition {
 //                    }
 
                     driver.findElement(By.xpath("//button[text()='Share']")).click();
-                    Boolean TickMark= driver.findElements(By.xpath("//h2[text()='Your post has been shared.']")).size()>0;
-                    if (!TickMark){
-                        System.out.println("Instagram post success without tagging ");
+                    Boolean TickMark = driver.findElements(By.xpath("//h2[text()='Your post has been shared.']")).size() > 0;
+                    if (!TickMark) {
+                        System.out.println("Instagram post failed with issues");
+                    }else{
+                        System.out.println("Instagram post Successfully posted");
+                        instaPostCount+=1;
                     }
                     driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='Close']")).click();
-
 
 
                     deleteFolder(CelebImageFolder);
                 }
 
-                driver.switchTo().window(bloggerTab);
+                if (!BloggerNotWorking) {
+                    driver.switchTo().window(bloggerTab);
+                    WebElement BloggerPostFrame = driver.findElement(By.xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/c-wiz/div/div[2]/div/div/div[3]/span/div/div[2]/div[2]"));
+                    StringBuilder EmbeddedTweetContent = new StringBuilder("<h4 style=\"text-align: left;\">Read more on twitter:</h4><p><br /></p>");
 
-                StringBuilder EmbeddedTweetContent = new StringBuilder("<h4 style=\"text-align: left;\">Read more on twitter:</h4><p><br /></p>");
+                    String EmbeddedTweetContentValue = EmbeddedTweetContent.toString();
+                    selection = new StringSelection(EmbeddedTweetContentValue);
+                    clipboard.setContents(selection, selection);
 
-                String EmbeddedTweetContentValue = EmbeddedTweetContent.toString();
-                selection = new StringSelection(EmbeddedTweetContentValue);
-                clipboard.setContents(selection, selection);
+                    actions.moveToElement(BloggerPostFrame).click().build().perform();
 
-                actions.moveToElement(BloggerPostFrame).click().build().perform();
+                    robot.keyPress(KeyEvent.VK_CONTROL);
+                    robot.keyPress(KeyEvent.VK_V);
+                    robot.keyRelease(KeyEvent.VK_V);
+                    robot.keyRelease(KeyEvent.VK_CONTROL);
 
-                robot.keyPress(KeyEvent.VK_CONTROL);
-                robot.keyPress(KeyEvent.VK_V);
-                robot.keyRelease(KeyEvent.VK_V);
-                robot.keyRelease(KeyEvent.VK_CONTROL);
-
-                Thread.sleep(2000);
+                    Thread.sleep(2000);
 
 
-                driver.switchTo().window(TwitterTab);
-                x.findElement(By.xpath(".//div[@aria-label='More']")).click();
-                driver.findElement(By.xpath("//span[text()='Embed Tweet']")).click();
-                Thread.sleep(3000);
-                Set<String> AllTabs = driver.getWindowHandles();
-                String EmbedTwitterTab;
-                for (String tabName : AllTabs) {
-                    if (!(tabName.equals(TwitterTab)) && !(tabName.equals(bloggerTab))) {
-                        driver.switchTo().window(tabName);
-                        EmbedTwitterTab = driver.getWindowHandle();
+                    driver.switchTo().window(TwitterTab);
+                    x.findElement(By.xpath(".//div[@aria-label='More']")).click();
+                    driver.findElement(By.xpath("//span[text()='Embed Tweet']")).click();
+                    Thread.sleep(3000);
+                    Set<String> AllTabs = driver.getWindowHandles();
+                    String EmbedTwitterTab;
+                    for (String tabName : AllTabs) {
+                        if (!(tabName.equals(TwitterTab)) && !(tabName.equals(bloggerTab))) {
+                            driver.switchTo().window(tabName);
+                            EmbedTwitterTab = driver.getWindowHandle();
 
+
+                        }
 
                     }
 
+                    driver.findElement(By.xpath("//button[text()='Copy Code']")).click();
+                    Thread.sleep(2000);
+                    driver.close();
+                    driver.switchTo().window(bloggerTab);
+                    actions.moveToElement(BloggerPostFrame).click().build().perform();
+                    robot.keyPress(KeyEvent.VK_CONTROL);
+                    robot.keyPress(KeyEvent.VK_V);
+                    robot.keyRelease(KeyEvent.VK_V);
+                    robot.keyRelease(KeyEvent.VK_CONTROL);
+
+                    LabelsString = String.join(",", Labels);
+                    driver.findElement(By.xpath("(//textarea[contains(@aria-label,'labels')])[1]")).click();
+                    driver.findElement(By.xpath("(//textarea[contains(@aria-label,'labels')])[1]")).sendKeys(LabelsString);
+
+                    driver.findElement(By.xpath("(//div[text()='Publish'])[1]")).click();
+                    driver.findElement(By.xpath("(//span[text()='Confirm'])[2]")).click();
+                    Boolean BlogHomePageManageButtonPresence = driver.findElements(By.xpath("(//span[text()='Manage'])[2]")).size() > 0;
+                    if (BlogHomePageManageButtonPresence) {
+                        blogPostCount += 1;
+                        //do add db stuff
+
+                    } else {
+                        System.exit(0);
+                    }
+
+
                 }
-
-                driver.findElement(By.xpath("//button[text()='Copy Code']")).click();
-                Thread.sleep(2000);
-                driver.close();
-                driver.switchTo().window(bloggerTab);
-                actions.moveToElement(BloggerPostFrame).click().build().perform();
-                robot.keyPress(KeyEvent.VK_CONTROL);
-                robot.keyPress(KeyEvent.VK_V);
-                robot.keyRelease(KeyEvent.VK_V);
-                robot.keyRelease(KeyEvent.VK_CONTROL);
-
-                LabelsString = String.join(",", Labels);
-                driver.findElement(By.xpath("(//textarea[contains(@aria-label,'labels')])[1]")).click();
-                driver.findElement(By.xpath("(//textarea[contains(@aria-label,'labels')])[1]")).sendKeys(LabelsString);
-
-                driver.findElement(By.xpath("(//div[text()='Publish'])[1]")).click();
-                driver.findElement(By.xpath("(//span[text()='Confirm'])[2]")).click();
-                Boolean BlogHomePageManageButtonPresence = driver.findElements(By.xpath("(//span[text()='Manage'])[2]")).size() > 0;
-                if (BlogHomePageManageButtonPresence) {
-                    blogPostCount+=1;
-                    //do add db stuff
-
-                } else {
-                    System.exit(0);
-                }
-
-
             }
 //            driver.switchTo().window(TwitterTab);
 //            driver.findElement(By.xpath("//div[@aria-label=\"Account menu\"]")).click();
@@ -730,6 +754,7 @@ public class stepDefinition {
             driver.close();
         driver.switchTo().window(TwitterTab);
         System.out.println("Total Blog Post Published: "+blogPostCount);
+        System.out.println("Total Insta Post Published: "+instaPostCount);
         driver.close();
         driver.switchTo().window(InstagramTab);
 
