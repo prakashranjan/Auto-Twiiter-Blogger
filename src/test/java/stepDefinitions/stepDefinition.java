@@ -37,6 +37,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -44,6 +45,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -320,7 +322,10 @@ public class stepDefinition {
                 //img[@alt='Image' and contains(@src,"=large")]
                 Boolean TweetImageYes = false;
                 Boolean TweetVideoYes = false;
+                StringSelection selection;
+                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 implicitWaitOff();
+
                 if (x.findElements(By.xpath(".//img[@alt='Image']")).size() > 0) {
                     implicitWaitOn();
                     x.findElement(By.xpath(".//img[@alt='Image']")).click();
@@ -384,7 +389,42 @@ public class stepDefinition {
 
                     ModalCloseButton.click();
                     TweetImageYes = true;
-                } else {
+                }
+                else if(x.findElements(By.xpath(".//a[text()='Download']")).size() > 0){
+                    try {
+
+                        x.findElement(By.xpath(".//a[text()='Download']")).click();
+                        Thread.sleep(3000);
+                        Set<String> AllTabsNow = driver.getWindowHandles();
+                        String DownloadVideoTwitterTab;
+                        for (String tabName : AllTabsNow) {
+                            if (!(tabName.equals(TwitterTab)) && !(tabName.equals(bloggerTab)) && !(tabName.equals(InstagramTab))) {
+                                driver.switchTo().window(tabName);
+                                DownloadVideoTwitterTab = driver.getWindowHandle();
+
+
+                            }
+
+                        }
+
+                        driver.findElement(By.xpath("(//a[contains(text(),'Download')])[2]")).click();
+
+                        if(driver.findElements(By.xpath("//div[@aria-label='Close ad']")).size() >0){
+                          driver.findElement(By.xpath("//div[@aria-label='Close ad']")).click();
+
+                        }
+                        Thread.sleep(20000);
+                        driver.close();
+
+                        TweetVideoYes = true;
+                    }
+                    catch (Exception e){
+                        TweetVideoYes=false;
+                        System.out.println("Video Download failed");
+                    }
+
+                }
+                else {
 
                     System.out.println("--------------No image found");
                     continue;
@@ -392,6 +432,7 @@ public class stepDefinition {
                 }
 
                 implicitWaitOn();
+                driver.switchTo().window(TwitterTab);
                 List<WebElement> TweetText = x.findElements(By.xpath(".//div[contains(@id,'id__')]/span"));
 
                 StringBuilder TweetHtmlContent = new StringBuilder();
@@ -453,8 +494,7 @@ public class stepDefinition {
                     }
                 }
                 utf8EncodedTweetRawContentvalue = utf8EncodedTweetRawContentvalue.replace("'", "\'");
-                StringSelection selection;
-                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+
                 String TweetHtmlContentValue = TweetHtmlContent.toString();
 
 //            ((JavascriptExecutor) driver).executeScript("arguments[0].value='"+utf8EncodedTweetRawContentvalue+"...-"+CelebFname+" "+TweetTypeVal+"';",BlogTitleInput );
@@ -500,6 +540,17 @@ public class stepDefinition {
 
                     Thread.sleep(2000);
                 }
+
+                String CelebFnameHashtag = "#" + CelebFname.replaceAll("\\s", "");
+                String DefaultTags = " #likes #like #follow #Cricket #CricketNews #RedNews " + CelebFnameHashtag;
+                String InstaPostTextAreaText="";
+                if(FullTweetDivText.isEmpty()) {
+                    InstaPostTextAreaText = html2text(TweetHtmlContentValue + DefaultTags);
+                }else{
+
+                    InstaPostTextAreaText = CelebFname +": " +FullTweetDivText+DefaultTags;
+                }
+
                 if (TweetImageYes) {
                     File CelebImageFolder = new File(".//target//tweetImages//" + strArg1 + "//Image");
                     File[] files = CelebImageFolder.listFiles();
@@ -595,15 +646,7 @@ public class stepDefinition {
                     driver.findElement(By.xpath("//button[text()='Next']")).click();
                     Thread.sleep(2000);
                     driver.findElement(By.xpath("//button[text()='Next']")).click();
-                    String CelebFnameHashtag = "#" + CelebFname.replaceAll("\\s", "");
-                    String DefaultTags = " #likes #like #follow #Cricket #CricketNews #RedNews " + CelebFnameHashtag;
-                    String InstaPostTextAreaText="";
-                    if(FullTweetDivText.isEmpty()) {
-                        InstaPostTextAreaText = html2text(TweetHtmlContentValue + DefaultTags);
-                    }else{
 
-                        InstaPostTextAreaText = CelebFname +": " +FullTweetDivText+DefaultTags;
-                    }
 
 
                     try {
@@ -615,7 +658,7 @@ public class stepDefinition {
 
 
 //                    for ( String LabelVal : Labels){
-//                        if(LabelVal.equalsIgnoreCase("tweet") || LabelVal.equalsIgnoreCase("Twitter")){
+//                        if(LabelVal.equalsIgnoreCase("tweet") || <h3 style="text-align: left;">&nbsp;Virender Sehwag:</h3><p>Lucknow seeing Shivam Dube bowl the 19th.</p>.equalsIgnoreCase("Twitter")){
 //                            continue;
 //                        }
 //                        Random rand= new Random();
@@ -653,6 +696,104 @@ public class stepDefinition {
 
 
                     deleteFolder(CelebImageFolder);
+                }
+                if(TweetVideoYes){
+                    driver.switchTo().window(InstagramTab);
+
+                    driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='New Post']")).click();
+                    driver.findElement(By.xpath("//div/button[text()='Select from computer']")).click();
+
+                    Thread.sleep(2000);
+//                    String VidPath= "C:\\Users\\praka\\Downloads\\ssstwitter_1648758550.mp4";
+
+                    File DownloadsFolder = new File("C://Users//praka//Downloads");
+
+                    File[] Videofiles = DownloadsFolder.listFiles(new FilenameFilter() {
+                        public boolean accept(File dir, String name) {
+                            return name.endsWith(".mp4");
+                        }
+                    });
+
+                    File CurVid=Videofiles[0];
+                    StringBuilder VideoPath = new StringBuilder(Videofiles[0].getAbsolutePath());
+
+                    String VideoPathValue = VideoPath.toString();
+                    selection = new StringSelection(VideoPathValue);
+                    clipboard.setContents(selection, selection);
+
+
+                    robot.keyPress(KeyEvent.VK_CONTROL);
+                    robot.keyPress(KeyEvent.VK_V);
+                    robot.keyRelease(KeyEvent.VK_V);
+                    robot.keyRelease(KeyEvent.VK_CONTROL);
+
+
+                    robot.keyPress(KeyEvent.VK_ENTER);
+                    robot.keyRelease(KeyEvent.VK_ENTER);
+
+                    Thread.sleep(2000);
+
+
+                    driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='Select Crop']")).click();
+                    Thread.sleep(2000);
+                    driver.findElement(By.xpath("//div[text()='Original']")).click();
+
+
+                driver.findElement(By.xpath("//button[text()='Next']")).click();
+                Thread.sleep(2000);
+                driver.findElement(By.xpath("//button[text()='Next']")).click();
+
+                    try {
+                        driver.findElement(By.xpath("//textarea[contains(@aria-label,'caption')]")).sendKeys(InstaPostTextAreaText);
+                    } catch (WebDriverException e) {
+                        System.out.println("BMP error Instagram caption");
+                        driver.findElement(By.xpath("//textarea[contains(@aria-label,'caption')]")).sendKeys(CelebFname + " Update" + DefaultTags);
+                    }
+
+
+//                    for ( String LabelVal : Labels){
+//                        if(LabelVal.equalsIgnoreCase("tweet") || <h3 style="text-align: left;">&nbsp;Virender Sehwag:</h3><p>Lucknow seeing Shivam Dube bowl the 19th.</p>.equalsIgnoreCase("Twitter")){
+//                            continue;
+//                        }
+//                        Random rand= new Random();
+//                        int xCo=rand.nextInt(30);
+//                        int yCo= rand.nextInt(30);
+//
+//
+//                        System.out.println("------------------"+xCo+"---"+yCo);
+//                        WebElement InstaPostDiv=driver.findElement(By.xpath("//img[@alt='Photo for tag placement']/following-sibling::div[@role='button']"));
+//                        actions.moveToElement(InstaPostDiv).build().perform();
+//                        actions.moveByOffset(xCo, yCo).click().build().perform();
+////                        actions.moveToElement(InstaPostDiv,rand.nextInt(),rand.nextInt()).click().perform();
+//
+//                            Boolean searchTag=driver.findElements(By.xpath("//input[@type='search']")).size()>0;
+//                            if (searchTag) {
+//                                driver.findElement(By.xpath("//input[@type='search']")).sendKeys(LabelVal);
+//                                Thread.sleep(2000);
+//                                driver.findElement(By.xpath("(//button/div/img[contains(@alt,'profile picture')])[1]")).click();
+//                            }
+//
+//                            Thread.sleep(1000);
+//
+//
+//                    }
+
+                    driver.findElement(By.xpath("//button[text()='Share']")).click();
+                    Boolean TickMark = driver.findElements(By.xpath("//h2[text()='Your post has been shared.']")).size() > 0;
+                    if (!TickMark) {
+                        System.out.println("Instagram post failed with issues");
+                    }else{
+                        System.out.println("Instagram post Successfully posted");
+                        instaPostCount+=1;
+                    }
+                    driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='Close']")).click();
+
+                    if (CurVid.delete()) {
+                        System.out.println("Video deleted successfully");
+                    }
+                    else {
+                        System.out.println("Failed to delete the video file");
+                    }
                 }
 
                 if (!BloggerNotWorking) {
