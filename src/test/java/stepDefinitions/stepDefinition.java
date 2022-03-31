@@ -408,9 +408,11 @@ public class stepDefinition {
 
                 }
 
-                WebElement FullTweetDiv = x.findElement(By.xpath(".//div/div[@lang]"));
+
 
                 try {
+                    implicitWaitOff();
+                    WebElement FullTweetDiv = x.findElement(By.xpath(".//div/div[@lang]"));
                     FullTweetDivText = html2text((String) ((JavascriptExecutor) driver).executeScript("return arguments[0].innerHTML;", FullTweetDiv));
                     System.out.println(FullTweetDivText);
                 }
@@ -439,7 +441,7 @@ public class stepDefinition {
 
                 driver.switchTo().window(bloggerTab);
                 driver.navigate().refresh();
-
+                implicitWaitOn();
                 if(!BloggerNotWorking) {
                     driver.findElement(By.xpath("//span[text()='New Post']")).click();
                     try {

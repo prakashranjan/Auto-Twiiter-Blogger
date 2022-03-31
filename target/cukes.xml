@@ -1,18 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?><testsuite errors="0" failures="1" name="io.cucumber.core.plugin.JUnitFormatter" skipped="0" tests="1" time="114.473">
-<testcase classname="Celeb tweet data" name="twitter default login" time="114.099">
-<failure message="chrome not reachable&#10;  (Session info: chrome=100.0.4896.60)&#10;Build info: version: '3.14.0', revision: 'aacccce0', time: '2018-08-02T20:19:58.91Z'&#10;System info: host: 'DIGLOO', ip: '192.168.0.157', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '11.0.12'&#10;Driver info: org.openqa.selenium.chrome.ChromeDriver&#10;Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 100.0.4896.60, chrome: {chromedriverVersion: 100.0.4896.20 (f9d71f93d32a..., userDataDir: C:/Users/praka/Documents/Ch...}, goog:chromeOptions: {debuggerAddress: localhost:50043}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}&#10;Session ID: 48e2931ed5374afb74e14a4e606942c1&#10;*** Element info: {Using=xpath, value=//div[@data-testid='Carousel-NavRight']}" type="org.openqa.selenium.WebDriverException"><![CDATA[Given "Chrome" browser is opened............................................passed
+<?xml version="1.0" encoding="UTF-8"?><testsuite errors="0" failures="1" name="io.cucumber.core.plugin.JUnitFormatter" skipped="0" tests="1" time="252.299">
+<testcase classname="Celeb tweet data" name="twitter default login" time="251.849">
+<failure message="no such element: Unable to locate element: {&quot;method&quot;:&quot;xpath&quot;,&quot;selector&quot;:&quot;//*[local-name()='svg' and @aria-label='Select Crop']&quot;}&#10;  (Session info: chrome=100.0.4896.60)&#10;For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html&#10;Build info: version: '3.14.0', revision: 'aacccce0', time: '2018-08-02T20:19:58.91Z'&#10;System info: host: 'DIGLOO', ip: '192.168.0.157', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '11.0.12'&#10;Driver info: org.openqa.selenium.chrome.ChromeDriver&#10;Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 100.0.4896.60, chrome: {chromedriverVersion: 100.0.4896.60 (6a5d10861ce8..., userDataDir: C:/Users/praka/Documents/Ch...}, goog:chromeOptions: {debuggerAddress: localhost:49597}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}&#10;Session ID: 66197a967a9adc19920015172ba7904d&#10;*** Element info: {Using=xpath, value=//*[local-name()='svg' and @aria-label='Select Crop']}" type="org.openqa.selenium.NoSuchElementException"><![CDATA[Given "Chrome" browser is opened............................................passed
 Given Celeb twitter page is open............................................failed
 Then Close browser..........................................................skipped
 
 StackTrace:
-org.openqa.selenium.WebDriverException: chrome not reachable
+org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"xpath","selector":"//*[local-name()='svg' and @aria-label='Select Crop']"}
   (Session info: chrome=100.0.4896.60)
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
 Build info: version: '3.14.0', revision: 'aacccce0', time: '2018-08-02T20:19:58.91Z'
 System info: host: 'DIGLOO', ip: '192.168.0.157', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '11.0.12'
 Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 100.0.4896.60, chrome: {chromedriverVersion: 100.0.4896.20 (f9d71f93d32a..., userDataDir: C:/Users/praka/Documents/Ch...}, goog:chromeOptions: {debuggerAddress: localhost:50043}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
-Session ID: 48e2931ed5374afb74e14a4e606942c1
-*** Element info: {Using=xpath, value=//div[@data-testid='Carousel-NavRight']}
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 100.0.4896.60, chrome: {chromedriverVersion: 100.0.4896.60 (6a5d10861ce8..., userDataDir: C:/Users/praka/Documents/Ch...}, goog:chromeOptions: {debuggerAddress: localhost:49597}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 66197a967a9adc19920015172ba7904d
+*** Element info: {Using=xpath, value=//*[local-name()='svg' and @aria-label='Select Crop']}
 	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
 	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
@@ -23,11 +24,11 @@ Session ID: 48e2931ed5374afb74e14a4e606942c1
 	at org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:158)
 	at org.openqa.selenium.remote.service.DriverCommandExecutor.execute(DriverCommandExecutor.java:83)
 	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:548)
-	at org.openqa.selenium.remote.RemoteWebDriver.findElements(RemoteWebDriver.java:349)
-	at org.openqa.selenium.remote.RemoteWebDriver.findElementsByXPath(RemoteWebDriver.java:428)
-	at org.openqa.selenium.By$ByXPath.findElements(By.java:348)
-	at org.openqa.selenium.remote.RemoteWebDriver.findElements(RemoteWebDriver.java:310)
-	at stepDefinitions.stepDefinition.celeb_twitter_page_is_open(stepDefinition.java:348)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:322)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath(RemoteWebDriver.java:424)
+	at org.openqa.selenium.By$ByXPath.findElement(By.java:353)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:314)
+	at stepDefinitions.stepDefinition.celeb_twitter_page_is_open(stepDefinition.java:590)
 	at ✽.Celeb twitter page is open(file:///C:/Users/praka/IdeaProjects/CucumberAuto/CucumberAuto/src/test/java/features/celeb1.feature:6)
 ]]></failure>
 </testcase>
