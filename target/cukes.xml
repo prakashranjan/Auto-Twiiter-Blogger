@@ -1,17 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?><testsuite errors="0" failures="1" name="io.cucumber.core.plugin.JUnitFormatter" skipped="0" tests="1" time="169.698">
-<testcase classname="Celeb tweet data" name="twitter default login" time="169.289">
-<failure message="element click intercepted: Element &lt;svg aria-label=&quot;New Post&quot; class=&quot;_8-yf5 &quot; color=&quot;#262626&quot; fill=&quot;#262626&quot; height=&quot;24&quot; role=&quot;img&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;24&quot;&gt;...&lt;/svg&gt; is not clickable at point (1277, 30). Other element would receive the click: &lt;div class=&quot;RnEpo  Yx5HN      &quot; role=&quot;presentation&quot;&gt;...&lt;/div&gt;&#10;  (Session info: chrome=100.0.4896.60)&#10;Build info: version: '3.14.0', revision: 'aacccce0', time: '2018-08-02T20:19:58.91Z'&#10;System info: host: 'DIGLOO', ip: '192.168.0.157', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '11.0.12'&#10;Driver info: org.openqa.selenium.chrome.ChromeDriver&#10;Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 100.0.4896.60, chrome: {chromedriverVersion: 100.0.4896.60 (6a5d10861ce8..., userDataDir: C:/Users/praka/Documents/Ch...}, goog:chromeOptions: {debuggerAddress: localhost:58656}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}&#10;Session ID: e3355d26b3ab72fd02b00971778dba87" type="org.openqa.selenium.ElementClickInterceptedException"><![CDATA[Given "Chrome" browser is opened............................................passed
+<?xml version="1.0" encoding="UTF-8"?><testsuite errors="0" failures="1" name="io.cucumber.core.plugin.JUnitFormatter" skipped="0" tests="1" time="1,295.784">
+<testcase classname="Celeb tweet data" name="twitter default login" time="1,295.284">
+<failure message="no such element: Unable to locate element: {&quot;method&quot;:&quot;xpath&quot;,&quot;selector&quot;:&quot;//label[text()='Large']&quot;}&#10;  (Session info: chrome=100.0.4896.75)&#10;For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html&#10;Build info: version: '3.14.0', revision: 'aacccce0', time: '2018-08-02T20:19:58.91Z'&#10;System info: host: 'DIGLOO', ip: '192.168.0.157', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '11.0.12'&#10;Driver info: org.openqa.selenium.chrome.ChromeDriver&#10;Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 100.0.4896.75, chrome: {chromedriverVersion: 100.0.4896.60 (6a5d10861ce8..., userDataDir: C:/Users/praka/Documents/Ch...}, goog:chromeOptions: {debuggerAddress: localhost:62761}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}&#10;Session ID: 46c3c461cb09433692c27977758cb45b&#10;*** Element info: {Using=xpath, value=//label[text()='Large']}" type="org.openqa.selenium.NoSuchElementException"><![CDATA[Given "Chrome" browser is opened............................................passed
 Given Celeb twitter page is open............................................failed
 Then Close browser..........................................................skipped
 
 StackTrace:
-org.openqa.selenium.ElementClickInterceptedException: element click intercepted: Element <svg aria-label="New Post" class="_8-yf5 " color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24">...</svg> is not clickable at point (1277, 30). Other element would receive the click: <div class="RnEpo  Yx5HN      " role="presentation">...</div>
-  (Session info: chrome=100.0.4896.60)
+org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"xpath","selector":"//label[text()='Large']"}
+  (Session info: chrome=100.0.4896.75)
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
 Build info: version: '3.14.0', revision: 'aacccce0', time: '2018-08-02T20:19:58.91Z'
 System info: host: 'DIGLOO', ip: '192.168.0.157', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '11.0.12'
 Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 100.0.4896.60, chrome: {chromedriverVersion: 100.0.4896.60 (6a5d10861ce8..., userDataDir: C:/Users/praka/Documents/Ch...}, goog:chromeOptions: {debuggerAddress: localhost:58656}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
-Session ID: e3355d26b3ab72fd02b00971778dba87
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 100.0.4896.75, chrome: {chromedriverVersion: 100.0.4896.60 (6a5d10861ce8..., userDataDir: C:/Users/praka/Documents/Ch...}, goog:chromeOptions: {debuggerAddress: localhost:62761}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 46c3c461cb09433692c27977758cb45b
+*** Element info: {Using=xpath, value=//label[text()='Large']}
 	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
 	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
@@ -22,9 +24,11 @@ Session ID: e3355d26b3ab72fd02b00971778dba87
 	at org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:158)
 	at org.openqa.selenium.remote.service.DriverCommandExecutor.execute(DriverCommandExecutor.java:83)
 	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:548)
-	at org.openqa.selenium.remote.RemoteWebElement.execute(RemoteWebElement.java:276)
-	at org.openqa.selenium.remote.RemoteWebElement.click(RemoteWebElement.java:83)
-	at stepDefinitions.stepDefinition.celeb_twitter_page_is_open(stepDefinition.java:601)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:322)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath(RemoteWebDriver.java:424)
+	at org.openqa.selenium.By$ByXPath.findElement(By.java:353)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:314)
+	at stepDefinitions.stepDefinition.celeb_twitter_page_is_open(stepDefinition.java:623)
 	at ✽.Celeb twitter page is open(file:///C:/Users/praka/IdeaProjects/CucumberAuto/CucumberAuto/src/test/java/features/celeb1.feature:6)
 ]]></failure>
 </testcase>
