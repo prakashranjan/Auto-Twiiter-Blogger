@@ -117,6 +117,7 @@ public class stepDefinition {
         File CelebImageFolder = new File(".//target//tweetImages//General//Image");
         File CelebVideoFolder = new File(".//target//tweetImages//General//Video");
         Boolean BloggerNotWorking= false;
+        Boolean StopInstaImage =false;
         ConnectionString connectionString = new ConnectionString("mongodb+srv://Tracker2:Ddd7856@cluster0.3jatg.mongodb.net/CelebTracker?retryWrites=true&w=majority");
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
@@ -331,7 +332,7 @@ public class stepDefinition {
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 implicitWaitOff();
 
-                if (x.findElements(By.xpath(".//img[@alt='Image']")).size() > 0) {
+                if ((x.findElements(By.xpath(".//img[@alt='Image']")).size() > 0) && (!StopInstaImage)){
                     implicitWaitOn();
                     x.findElement(By.xpath(".//img[@alt='Image']")).click();
 
@@ -354,9 +355,17 @@ public class stepDefinition {
 
 //                driver.findElement(By.xpath("//img[@alt='Image' and contains(@src,\"=large\")]")).click();
                         ModalCloseButton = driver.findElement(By.xpath("//div[@aria-label='Close']"));
+                        Thread.sleep(2000);
                         implicitWaitOff();
-                        Boolean ImgModalRightArrow = driver.findElements(By.xpath("//div[@data-testid='Carousel-NavRight']")).size() > 0;
-                        if (ImgModalRightArrow) {
+//                        Boolean ImgModalRightArrow = driver.findElements(By.xpath("//div[@data-testid='Carousel-NavRight']")).size() > 0;
+                        Boolean ImgModalRightArrow= false;
+                        try {
+                            ImgModalRightArrow = driver.findElement(By.xpath("//div[@data-testid='Carousel-NavRight']")).isDisplayed();
+                        }
+                        catch(Exception e){
+                            System.out.println("no right arrow");
+                        }
+                            if (ImgModalRightArrow) {
                             Thread.sleep(2000);
                             WebDriverWait waitTime = new WebDriverWait(driver, 5);
                             WebElement rightArrowSymbol = waitTime.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@data-testid='Carousel-NavRight']")));
@@ -584,6 +593,7 @@ public class stepDefinition {
 
                 if (TweetImageYes) {
 
+
                     File[] files = CelebImageFolder.listFiles();
                     if (!BloggerNotWorking) {
                         driver.findElement(By.xpath("(//div[@aria-label='Insert image'])[3]")).click();
@@ -628,7 +638,11 @@ public class stepDefinition {
                     }
                     //code for instagram post
                     driver.switchTo().window(InstagramTab);
-
+                    Boolean CGpopup = driver.findElements(By.xpath("//h2[text()='Your Post Goes Against Our Community Guidelines']")).size()>0;
+                    if(CGpopup){
+                        driver.findElement(By.xpath("//button[text()='OK']")).click();
+                        StopInstaImage=true;
+                    }
                     driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='New Post']")).click();
                     driver.findElement(By.xpath("//div/button[text()='Select from computer']")).click();
 
@@ -739,6 +753,12 @@ public class stepDefinition {
                 }
                 if(TweetVideoYes){
                     driver.switchTo().window(InstagramTab);
+
+                    Boolean CGpopup = driver.findElements(By.xpath("//h2[text()='Your Post Goes Against Our Community Guidelines']")).size()>0;
+                    if(CGpopup){
+                        driver.findElement(By.xpath("//button[text()='OK']")).click();
+                        StopInstaImage=true;
+                    }
 
                     driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='New Post']")).click();
                     driver.findElement(By.xpath("//div/button[text()='Select from computer']")).click();
