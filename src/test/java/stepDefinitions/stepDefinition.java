@@ -116,8 +116,8 @@ public class stepDefinition {
         int instaPostCount=0;
         File CelebImageFolder = new File(".//target//tweetImages//General//Image");
         File CelebVideoFolder = new File(".//target//tweetImages//General//Video");
-        Boolean BloggerNotWorking= false;
-        Boolean StopInstaImage =false;
+        Boolean BloggerNotWorking= true;
+        Boolean StopInstaImage =true;
         ConnectionString connectionString = new ConnectionString("mongodb+srv://Tracker2:Ddd7856@cluster0.3jatg.mongodb.net/CelebTracker?retryWrites=true&w=majority");
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
@@ -591,7 +591,7 @@ public class stepDefinition {
                     InstaPostTextAreaText = CelebFname +": " +FullTweetDivText+DefaultTags;
                 }
 
-                if (TweetImageYes) {
+                if (TweetImageYes && (!StopInstaImage)) {
 
 
                     File[] files = CelebImageFolder.listFiles();
