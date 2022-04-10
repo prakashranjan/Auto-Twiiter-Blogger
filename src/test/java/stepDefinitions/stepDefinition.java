@@ -117,7 +117,7 @@ public class stepDefinition {
         File CelebImageFolder = new File(".//target//tweetImages//General//Image");
         File CelebVideoFolder = new File(".//target//tweetImages//General//Video");
         Boolean BloggerNotWorking= true;
-        Boolean StopInstaImage =true;
+        Boolean StopInstaImage =false;
         ConnectionString connectionString = new ConnectionString("mongodb+srv://Tracker2:Ddd7856@cluster0.3jatg.mongodb.net/CelebTracker?retryWrites=true&w=majority");
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
