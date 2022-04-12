@@ -114,10 +114,40 @@ public class stepDefinition {
     public void celeb_twitter_page_is_open() throws Throwable {
         int blogPostCount=0;
         int instaPostCount=0;
+
+        Boolean BloggerNotWorking= false;
+        Boolean StopInstaImage =false;
         File CelebImageFolder = new File(".//target//tweetImages//General//Image");
         File CelebVideoFolder = new File(".//target//tweetImages//General//Video");
-        Boolean BloggerNotWorking= true;
-        Boolean StopInstaImage =true;
+        ConnectionString connectionString4 = new ConnectionString("mongodb+srv://Tracker2:Ddd7856@cluster0.3jatg.mongodb.net/CelebTracker?retryWrites=true&w=majority");
+        MongoClientSettings settings4 = MongoClientSettings.builder()
+                .applyConnectionString(connectionString4)
+                .build();
+        MongoClient mongoClient4 = MongoClients.create(settings4);
+        MongoDatabase database4 = mongoClient4.getDatabase("CelebTracker");
+        MongoCollection<Document> collection4 = database4.getCollection("Triggers");
+        BsonDocument filter4 = new BsonDocument();
+
+        collection4.countDocuments(filter4);
+//        System.out.println("Connected");
+
+        Iterator<Document> itr4 = collection4.find().iterator();
+        mongoClient4.close();
+
+        while (itr4.hasNext()) {
+//            stopper=false;
+            Document dcur4 = itr4.next();
+//
+            if((dcur4.get("trigger").toString()).equals("BloggerNotWorking")){
+                BloggerNotWorking=(Boolean)dcur4.get("value");
+
+            }else if((dcur4.get("trigger").toString()).equals("StopInstaImage")) {
+                StopInstaImage = (Boolean) dcur4.get("value");
+            }
+            }
+
+
+
         ConnectionString connectionString = new ConnectionString("mongodb+srv://Tracker2:Ddd7856@cluster0.3jatg.mongodb.net/CelebTracker?retryWrites=true&w=majority");
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
@@ -274,7 +304,7 @@ public class stepDefinition {
 
 
             WebElement FourthTweet= driver.findElement(By.xpath("(//div[contains(@aria-label,'Tweets') and contains(@aria-label,'Timeline')]/div/div)[4]"));
-            Thread.sleep(2000);
+            Thread.sleep(3000);
             List<WebElement> Tweets = driver.findElements(By.xpath("//div[contains(@aria-label,'Tweets') and contains(@aria-label,'Timeline')]/div/div"));
 
             int TweetXpathCount=0;

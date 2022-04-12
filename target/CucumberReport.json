@@ -11,7 +11,7 @@
         "steps": [
           {
             "result": {
-              "duration": 9768642300,
+              "duration": 8542093100,
               "status": "passed"
             },
             "line": 3,
@@ -30,7 +30,7 @@
         ]
       },
       {
-        "start_timestamp": "2022-04-08T20:05:04.124Z",
+        "start_timestamp": "2022-04-12T20:01:19.275Z",
         "line": 5,
         "name": "twitter default login",
         "description": "",
@@ -40,8 +40,9 @@
         "steps": [
           {
             "result": {
-              "duration": 260463872400,
-              "status": "passed"
+              "error_message": "org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {\"method\":\"xpath\",\"selector\":\".//a[@href\u003d\u0027/CricNewsHub\u0027]/div/div/span/span\"}\n  (Session info: chrome\u003d100.0.4896.88)\nFor documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html\nBuild info: version: \u00273.14.0\u0027, revision: \u0027aacccce0\u0027, time: \u00272018-08-02T20:19:58.91Z\u0027\nSystem info: host: \u0027DIGLOO\u0027, ip: \u0027192.168.0.157\u0027, os.name: \u0027Windows 10\u0027, os.arch: \u0027amd64\u0027, os.version: \u002710.0\u0027, java.version: \u002711.0.12\u0027\nDriver info: org.openqa.selenium.chrome.ChromeDriver\nCapabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 100.0.4896.88, chrome: {chromedriverVersion: 100.0.4896.60 (6a5d10861ce8..., userDataDir: C:/Users/praka/Documents/Ch...}, goog:chromeOptions: {debuggerAddress: localhost:63967}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}\nSession ID: 5cdf61ce70e03a7ae3b68346c7674dc4\n*** Element info: {Using\u003dxpath, value\u003d.//a[@href\u003d\u0027/CricNewsHub\u0027]/div/div/span/span}\r\n\tat java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)\r\n\tat java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)\r\n\tat java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)\r\n\tat java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:490)\r\n\tat org.openqa.selenium.remote.http.W3CHttpResponseCodec.createException(W3CHttpResponseCodec.java:187)\r\n\tat org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:122)\r\n\tat org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:49)\r\n\tat org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:158)\r\n\tat org.openqa.selenium.remote.service.DriverCommandExecutor.execute(DriverCommandExecutor.java:83)\r\n\tat org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:548)\r\n\tat org.openqa.selenium.remote.RemoteWebElement.execute(RemoteWebElement.java:276)\r\n\tat org.openqa.selenium.remote.RemoteWebElement.findElement(RemoteWebElement.java:179)\r\n\tat org.openqa.selenium.remote.RemoteWebElement.findElementByXPath(RemoteWebElement.java:252)\r\n\tat org.openqa.selenium.By$ByXPath.findElement(By.java:353)\r\n\tat org.openqa.selenium.remote.RemoteWebElement.findElement(RemoteWebElement.java:175)\r\n\tat stepDefinitions.stepDefinition.celeb_twitter_page_is_open(stepDefinition.java:326)\r\n\tat ✽.Celeb twitter page is open(file:///C:/Users/praka/IdeaProjects/CucumberAuto/CucumberAuto/src/test/java/features/celeb1.feature:6)\r\n",
+              "duration": 227124280900,
+              "status": "failed"
             },
             "line": 6,
             "name": "Celeb twitter page is open",
@@ -52,8 +53,7 @@
           },
           {
             "result": {
-              "duration": 1074591700,
-              "status": "passed"
+              "status": "skipped"
             },
             "line": 7,
             "name": "Close browser",
