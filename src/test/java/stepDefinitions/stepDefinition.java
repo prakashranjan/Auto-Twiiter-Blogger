@@ -38,6 +38,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 import javax.imageio.ImageIO;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -726,8 +729,8 @@ public class stepDefinition {
 
                     try {
                         driver.findElement(By.xpath("//textarea[contains(@aria-label,'caption')]")).sendKeys(InstaPostTextAreaText);
-                    } catch (WebDriverException e) {
-                        System.out.println("BMP error Instagram caption");
+                    } catch (Exception e) {
+//                        System.out.println("BMP error Instagram caption");
                         driver.findElement(By.xpath("//textarea[contains(@aria-label,'caption')]")).sendKeys(CelebFname + " Update" + DefaultTags);
                     }
 
@@ -838,8 +841,8 @@ public class stepDefinition {
 
                     try {
                         driver.findElement(By.xpath("//textarea[contains(@aria-label,'caption')]")).sendKeys(InstaPostTextAreaText);
-                    } catch (WebDriverException e) {
-                        System.out.println("BMP error Instagram caption");
+                    } catch (Exception e) {
+//                        System.out.println("BMP error Instagram caption");
                         driver.findElement(By.xpath("//textarea[contains(@aria-label,'caption')]")).sendKeys(CelebFname + " Update" + DefaultTags);
                     }
 
@@ -995,6 +998,47 @@ public class stepDefinition {
         driver.switchTo().window(bloggerTab);
             driver.close();
         driver.switchTo().window(TwitterTab);
+
+        if(blogPostCount>0 || instaPostCount>0) {
+            final String username = "prakash.rsingh04@gmail.com";
+            final String password = "Ddd@7856";
+
+            Properties prop = new Properties();
+            prop.put("mail.smtp.host", "smtp.gmail.com");
+            prop.put("mail.smtp.port", "465");
+            prop.put("mail.smtp.auth", "true");
+            prop.put("mail.smtp.socketFactory.port", "465");
+            prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+
+            Session session = Session.getInstance(prop,
+                    new javax.mail.Authenticator() {
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(username, password);
+                        }
+                    });
+
+            try {
+
+                Message message = new MimeMessage(session);
+                message.setFrom(new InternetAddress("prakash.rsingh04@gmail.com"));
+                message.setRecipients(
+                        Message.RecipientType.TO,
+                        InternetAddress.parse("prakash.rsingh04@gmail.com")
+                );
+                message.setSubject("RedNEWS Status");
+                message.setText("Total Blog Post Published: " + blogPostCount
+                        + "\n" + "Total Insta Post Published: " + instaPostCount +
+                        "\n");
+
+                Transport.send(message);
+
+                System.out.println("Done");
+
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+        }
+
         System.out.println("Total Blog Post Published: "+blogPostCount);
         System.out.println("Total Insta Post Published: "+instaPostCount);
         driver.close();
@@ -1030,6 +1074,8 @@ public class stepDefinition {
             }
         }
     }
+
+
 
     public void implicitWaitOn(int tsec){
         driver.manage().timeouts().implicitlyWait(tsec, TimeUnit.SECONDS);
