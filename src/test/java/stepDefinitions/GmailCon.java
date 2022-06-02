@@ -12,7 +12,7 @@ import java.util.Properties;
         public static void main(String[] args) {
 
             final String username = "prakash.rsingh04@gmail.com";
-            final String password = "Ddd@7856";
+            final String password = "kswmihiehqryagqf";
 
             Properties prop = new Properties();
             prop.put("mail.smtp.host", "smtp.gmail.com");

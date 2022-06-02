@@ -63,6 +63,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 import static com.thoughtworks.selenium.SeleneseTestNgHelper.assertEquals;
 
 
@@ -343,7 +344,7 @@ public class stepDefinition {
 
 //                System.out.println("After formatting: " + tweetDateCurValueStr);
                 System.out.println(DbdateStrval + " and " + tweetDateCurValueStr);
-                if (DbdateStrval.compareToIgnoreCase(tweetDateCurValueStr) > 0) {
+                if (DbdateStrval.compareToIgnoreCase(tweetDateCurValueStr) < 0) {
                     System.out.println("loop will break");
                     break;
 
@@ -623,6 +624,7 @@ public class stepDefinition {
 
                     InstaPostTextAreaText = CelebFname +": " +FullTweetDivText+DefaultTags;
                 }
+                System.out.println(InstaPostTextAreaText);
 
                 if (TweetImageYes && (!StopInstaImage)) {
 
@@ -671,12 +673,19 @@ public class stepDefinition {
                     }
                     //code for instagram post
                     driver.switchTo().window(InstagramTab);
-                    Boolean CGpopup = driver.findElements(By.xpath("//h2[text()='Your Post Goes Against Our Community Guidelines']")).size()>0;
+                    Boolean CGpopup = null;
+                    try {
+                        CGpopup = driver.findElements(By.xpath("//h2[text()='Your Post Goes Against Our Community Guidelines']")).size() > 0;
+                    }
+                    catch(Exception e){
+                        e.printStackTrace();
+                    }
                     if(CGpopup){
                         driver.findElement(By.xpath("//button[text()='OK']")).click();
                         StopInstaImage=true;
                     }
-                    driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='New Post']")).click();
+
+                    driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='New post']")).click();
                     driver.findElement(By.xpath("//div/button[text()='Select from computer']")).click();
 
                     if (files != null) { //some JVMs r
@@ -716,7 +725,7 @@ public class stepDefinition {
 //                            robot.keyRelease(KeyEvent.VK_ESCAPE);
                             t += 1;
                         }
-                        driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='Select Crop']")).click();
+                        driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='Select crop']")).click();
                         Thread.sleep(2000);
                         driver.findElement(By.xpath("//div[text()='Original']")).click();
                     }
@@ -728,7 +737,12 @@ public class stepDefinition {
 
 
                     try {
+                        if(InstaPostTextAreaText.isEmpty()){
+                            throw new IOException();
+                        }
+                        else{
                         driver.findElement(By.xpath("//textarea[contains(@aria-label,'caption')]")).sendKeys(InstaPostTextAreaText);
+                        }
                     } catch (Exception e) {
 //                        System.out.println("BMP error Instagram caption");
                         driver.findElement(By.xpath("//textarea[contains(@aria-label,'caption')]")).sendKeys(CelebFname + " Update" + DefaultTags);
@@ -793,7 +807,7 @@ public class stepDefinition {
                         StopInstaImage=true;
                     }
 
-                    driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='New Post']")).click();
+                    driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='New post']")).click();
                     driver.findElement(By.xpath("//div/button[text()='Select from computer']")).click();
 
                     Thread.sleep(2000);
@@ -830,7 +844,7 @@ public class stepDefinition {
                     Thread.sleep(2000);
 
 
-                    driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='Select Crop']")).click();
+                    driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='Select crop']")).click();
                     Thread.sleep(2000);
                     driver.findElement(By.xpath("//div[text()='Original']")).click();
 
@@ -840,7 +854,13 @@ public class stepDefinition {
                 driver.findElement(By.xpath("//button[text()='Next']")).click();
 
                     try {
-                        driver.findElement(By.xpath("//textarea[contains(@aria-label,'caption')]")).sendKeys(InstaPostTextAreaText);
+                        if(InstaPostTextAreaText.isEmpty()){
+                            throw new IOException();
+                        }
+                        else{
+                            driver.findElement(By.xpath("//textarea[contains(@aria-label,'caption')]")).sendKeys(InstaPostTextAreaText);
+                        }
+
                     } catch (Exception e) {
 //                        System.out.println("BMP error Instagram caption");
                         driver.findElement(By.xpath("//textarea[contains(@aria-label,'caption')]")).sendKeys(CelebFname + " Update" + DefaultTags);
@@ -1001,7 +1021,7 @@ public class stepDefinition {
 
         if(blogPostCount>0 || instaPostCount>0) {
             final String username = "prakash.rsingh04@gmail.com";
-            final String password = "Ddd@7856";
+            final String password = "kswmihiehqryagqf";
 
             Properties prop = new Properties();
             prop.put("mail.smtp.host", "smtp.gmail.com");
@@ -1026,8 +1046,7 @@ public class stepDefinition {
                         InternetAddress.parse("prakash.rsingh04@gmail.com")
                 );
                 message.setSubject("RedNEWS Status");
-                message.setText("Total Blog Post Published: " + blogPostCount
-                        + "\n" + "Total Insta Post Published: " + instaPostCount +
+                message.setText("Total Insta Post Published: " + instaPostCount +
                         "\n");
 
                 Transport.send(message);
