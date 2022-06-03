@@ -307,7 +307,7 @@ public class stepDefinition {
 //            driver.findElement(By.xpath("//span[text()='Tweets & replies']")).click();
 
 
-            WebElement FourthTweet= driver.findElement(By.xpath("(//div[contains(@aria-label,'Tweets') and contains(@aria-label,'Timeline')]/div/div)[4]"));
+            WebElement FourthTweet= driver.findElement(By.xpath("(//div[contains(@aria-label,'Tweets') and contains(@aria-label,'Timeline')]/div/div)[2]"));
             Thread.sleep(3000);
             List<WebElement> Tweets = driver.findElements(By.xpath("//div[contains(@aria-label,'Tweets') and contains(@aria-label,'Timeline')]/div/div"));
 
