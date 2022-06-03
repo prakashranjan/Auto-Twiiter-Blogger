@@ -344,7 +344,7 @@ public class stepDefinition {
 
 //                System.out.println("After formatting: " + tweetDateCurValueStr);
                 System.out.println(DbdateStrval + " and " + tweetDateCurValueStr);
-                if (DbdateStrval.compareToIgnoreCase(tweetDateCurValueStr) < 0) {
+                if (DbdateStrval.compareToIgnoreCase(tweetDateCurValueStr) > 0) {
                     System.out.println("loop will break");
                     break;
 
