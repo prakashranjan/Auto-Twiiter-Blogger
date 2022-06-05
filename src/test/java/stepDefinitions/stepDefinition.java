@@ -693,7 +693,7 @@ public class stepDefinition {
                         int t = 1;
                         for (File f : files) {
                             if (t == 2) {
-                                driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='Open Media Gallery']")).click();
+                                driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='Open media gallery']")).click();
                                 driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='Plus icon']")).click();
                             } else if (t != 1) {
                                 driver.findElement(By.xpath("//*[local-name()='svg' and @aria-label='Plus icon']")).click();
