@@ -1,5 +1,6 @@
 package stepDefinitions;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -91,6 +92,8 @@ public class stepDefinition {
 
 
             options.merge(capabilities);
+//            options.addArguments("user-data-dir=C:/Users/praka/Documents/ChromeAuto/User Data Pink");
+//            options.addArguments("profile-directory=Profile 4");
             options.addArguments("user-data-dir=C:/Users/praka/Documents/ChromeAuto/User Data Dev");
             options.addArguments("profile-directory=Profile 3");
 //            options.addExtensions (new File("C://Users//praka//Downloads//nbkknbagklenkcienihfapbfpjemnfoi.crx"));
@@ -163,8 +166,11 @@ public class stepDefinition {
         
         collection.countDocuments(filter);
 //        System.out.println("Connected");
+        BasicDBObject whereQuery = new BasicDBObject();
+//        whereQuery.put("Category", "Entertainment");
+        whereQuery.put("Category", "Sports");
 
-        Iterator<Document> itr = collection.find().iterator();
+        Iterator<Document> itr = collection.find(whereQuery).iterator();
         mongoClient.close();
 
         String bloggerTab="";
@@ -204,14 +210,15 @@ public class stepDefinition {
             Boolean Notification = (Boolean) dcur.get("Notification");
 
             if(!Notification){
-                break;
+                continue;
             }
 
 
             //db connect will be made and loop will execute
 
             driver.switchTo().window(TwitterTab);
-            driver.get("https://twitter.com/" + strArg1+"/with_replies");
+//            driver.get("https://twitter.com/" + strArg1+"/with_replies");
+            driver.get("https://twitter.com/" + strArg1+"/media");
             TwitterTab = driver.getWindowHandle();
 //            ((JavascriptExecutor) driver).executeScript("window.open()");
 
@@ -273,7 +280,9 @@ public class stepDefinition {
             Boolean LoginButtonPresent = driver.findElements(By.xpath("(//a[@href=\"/login\"])[1]")).size() > 0;
 
             implicitWaitOn();
-            WebElement WithRepliesBtn = driver.findElement(By.xpath("//span[text()='Tweets & replies']"));
+           // WebElement WithRepliesBtn = driver.findElement(By.xpath("//span[text()='Tweets & replies']"));
+            WebElement WithRepliesBtn = driver.findElement(By.xpath("//span[text()='Media']"));
+
             if (LoginButtonPresent) {
                 driver.findElement(By.xpath("(//a[@href=\"/login\"])[1]")).click();
 //        Thread.sleep(3000);
@@ -307,9 +316,9 @@ public class stepDefinition {
 //            driver.findElement(By.xpath("//span[text()='Tweets & replies']")).click();
 
 
-            WebElement FourthTweet= driver.findElement(By.xpath("(//div[contains(@aria-label,'Tweets') and contains(@aria-label,'Timeline')]/div/div)[2]"));
+            WebElement FourthTweet= driver.findElement(By.xpath("(//div[contains(@aria-label,'Photos') and contains(@aria-label,'Timeline')]/div/div)[2]"));
             Thread.sleep(3000);
-            List<WebElement> Tweets = driver.findElements(By.xpath("//div[contains(@aria-label,'Tweets') and contains(@aria-label,'Timeline')]/div/div"));
+            List<WebElement> Tweets = driver.findElements(By.xpath("//div[contains(@aria-label,'Photos') and contains(@aria-label,'Timeline')]/div/div"));
 
             int TweetXpathCount=0;
             for (WebElement x : Tweets) {
