@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?><testsuite errors="0" failures="0" name="io.cucumber.core.plugin.JUnitFormatter" skipped="0" tests="1" time="125.468">
-<testcase classname="Celeb tweet data" name="twitter default login" time="124.827">
-<system-out><![CDATA[Given "Chrome" browser is opened............................................passed
-Given Celeb twitter page is open............................................passed
+<?xml version="1.0" encoding="UTF-8"?><testsuite errors="0" failures="0" name="io.cucumber.core.plugin.JUnitFormatter" skipped="0" tests="1" time="457.203">
+<testcase classname="Celeb tweet data" name="PinkStarVibes step" time="456.75">
+<system-out><![CDATA[Given "Chrome" browser is opened with "Actress" profile.....................passed
+Then "Actress" page is open.................................................passed
 Then Close browser..........................................................passed
 ]]></system-out>
 </testcase>

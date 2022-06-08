@@ -3,59 +3,60 @@
     "line": 1,
     "elements": [
       {
-        "line": 2,
-        "name": "",
+        "start_timestamp": "2022-06-08T21:10:37.344Z",
+        "line": 9,
+        "name": "PinkStarVibes step",
         "description": "",
-        "type": "background",
-        "keyword": "Background",
-        "steps": [
-          {
-            "result": {
-              "duration": 8213488800,
-              "status": "passed"
-            },
-            "line": 3,
-            "name": "\"Chrome\" browser is opened",
-            "match": {
-              "arguments": [
-                {
-                  "val": "Chrome",
-                  "offset": 1
-                }
-              ],
-              "location": "stepDefinitions.stepDefinition.something_browser_is_opened(java.lang.String)"
-            },
-            "keyword": "Given "
-          }
-        ]
-      },
-      {
-        "start_timestamp": "2022-06-06T21:20:30.572Z",
-        "line": 5,
-        "name": "twitter default login",
-        "description": "",
-        "id": "celeb-tweet-data;twitter-default-login",
+        "id": "celeb-tweet-data;pinkstarvibes-step",
         "type": "scenario",
         "keyword": "Scenario",
         "steps": [
           {
             "result": {
-              "duration": 110529402800,
+              "duration": 9173848100,
               "status": "passed"
             },
-            "line": 6,
-            "name": "Celeb twitter page is open",
+            "line": 10,
+            "name": "\"Chrome\" browser is opened with \"Actress\" profile",
             "match": {
-              "location": "stepDefinitions.stepDefinition.celeb_twitter_page_is_open()"
+              "arguments": [
+                {
+                  "val": "Chrome",
+                  "offset": 1
+                },
+                {
+                  "val": "Actress",
+                  "offset": 33
+                }
+              ],
+              "location": "stepDefinitions.stepDefinition.something_browser_is_opened(java.lang.String,java.lang.String)"
             },
             "keyword": "Given "
           },
           {
             "result": {
-              "duration": 5871340300,
+              "duration": 440980514700,
               "status": "passed"
             },
-            "line": 7,
+            "line": 11,
+            "name": "\"Actress\" page is open",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Actress",
+                  "offset": 1
+                }
+              ],
+              "location": "stepDefinitions.stepDefinition.celeb_twitter_page_is_open(java.lang.String)"
+            },
+            "keyword": "Then "
+          },
+          {
+            "result": {
+              "duration": 6394051700,
+              "status": "passed"
+            },
+            "line": 12,
             "name": "Close browser",
             "match": {
               "location": "stepDefinitions.stepDefinition.homepage_is_populated()"

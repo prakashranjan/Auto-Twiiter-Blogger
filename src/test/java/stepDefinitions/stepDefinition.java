@@ -76,8 +76,8 @@ public class stepDefinition {
     Robot robot;
 
 
-    @Given("^\"([^\"]*)\" browser is opened$")
-    public void something_browser_is_opened(String strArg1) throws Throwable {
+    @Given("^\"([^\"]*)\" browser is opened with \"([^\"]*)\" profile$")
+    public void something_browser_is_opened(String strArg1, String strArg2 ) throws Throwable {
         if(strArg1.equals("Chrome")) {
             DesiredCapabilities caps = new DesiredCapabilities();
             caps.setCapability("resolution", "1920x1080");
@@ -92,10 +92,13 @@ public class stepDefinition {
 
 
             options.merge(capabilities);
-//            options.addArguments("user-data-dir=C:/Users/praka/Documents/ChromeAuto/User Data Pink");
-//            options.addArguments("profile-directory=Profile 4");
+
+            if(strArg2.equals("Actress")){options.addArguments("user-data-dir=C:/Users/praka/Documents/ChromeAuto/User Data Pink");
+            options.addArguments("profile-directory=Profile 4");}
+            else if(strArg2.equals("Cricket")){
             options.addArguments("user-data-dir=C:/Users/praka/Documents/ChromeAuto/User Data Dev");
-            options.addArguments("profile-directory=Profile 3");
+            options.addArguments("profile-directory=Profile 3");}
+
 //            options.addExtensions (new File("C://Users//praka//Downloads//nbkknbagklenkcienihfapbfpjemnfoi.crx"));
 //            options.addArguments("--start-fullscreen");
             driver = new ChromeDriver( options);
@@ -117,8 +120,8 @@ public class stepDefinition {
     }
 
 
-    @Given("^Celeb twitter page is open$")
-    public void celeb_twitter_page_is_open() throws Throwable {
+    @Then("^\"([^\"]*)\" page is open$")
+    public void celeb_twitter_page_is_open(String SubCategory) throws Throwable {
         int blogPostCount=0;
         int instaPostCount=0;
 
@@ -137,8 +140,10 @@ public class stepDefinition {
 
         collection4.countDocuments(filter4);
 //        System.out.println("Connected");
+        BasicDBObject whereQueryTrigger = new BasicDBObject();
+        whereQueryTrigger.put("Sub-Category", SubCategory);
 
-        Iterator<Document> itr4 = collection4.find().iterator();
+        Iterator<Document> itr4 = collection4.find(whereQueryTrigger).iterator();
         mongoClient4.close();
 
         while (itr4.hasNext()) {
@@ -167,8 +172,8 @@ public class stepDefinition {
         collection.countDocuments(filter);
 //        System.out.println("Connected");
         BasicDBObject whereQuery = new BasicDBObject();
-//        whereQuery.put("Category", "Entertainment");
-        whereQuery.put("Category", "Sports");
+        whereQuery.put("Sub-Category", SubCategory);
+
 
         Iterator<Document> itr = collection.find(whereQuery).iterator();
         mongoClient.close();
@@ -447,12 +452,12 @@ public class stepDefinition {
                     ModalCloseButton.click();
                     TweetImageYes = true;
                 }
-                else if(driver.findElements(By.xpath("(//div[contains(@aria-label,'Tweets') and contains(@aria-label,'Timeline')]/div/div)["+TweetXpathCount+"]/*//a[text()='Download']")).size() > 0){
+                else if(driver.findElements(By.xpath("(//div[contains(@aria-label,'Photos') and contains(@aria-label,'Timeline')]/div/div)["+TweetXpathCount+"]/*//a[text()='Download']")).size() > 0){
                     String DownloadVideoTwitterTab="";
                     try {
                            deleteFolder(CelebVideoFolder);
 //                        driver.findElement(By.xpath(".//a[text()='Download']")).click();
-                        driver.findElement(By.xpath("(//div[contains(@aria-label,'Tweets') and contains(@aria-label,'Timeline')]/div/div)["+TweetXpathCount+"]/*//a[text()='Download']")).click();
+                        driver.findElement(By.xpath("(//div[contains(@aria-label,'Photos') and contains(@aria-label,'Timeline')]/div/div)["+TweetXpathCount+"]/*//a[text()='Download']")).click();
                         Thread.sleep(3000);
                         Set<String> AllTabsNow = driver.getWindowHandles();
 
@@ -625,7 +630,16 @@ public class stepDefinition {
                 }
 
                 String CelebFnameHashtag = "#" + CelebFname.replaceAll("\\s", "");
-                String DefaultTags = " #likes #like #follow #Cricket #CricketNews #RedNews " + CelebFnameHashtag;
+
+                String Deftag="";
+                if(SubCategory.equals("Cricket")){
+                    Deftag=" #likes #like #follow #Cricket #CricketNews #RedNews ";
+                }else if(SubCategory.equals("Actress")){
+                    Deftag=" #likes #like #follow #sexy #PinkStarVibes #Star #celeb ";
+                }
+
+                String DefaultTags = Deftag + CelebFnameHashtag;
+
                 String InstaPostTextAreaText="";
                 if(FullTweetDivText.isEmpty()) {
                     InstaPostTextAreaText = html2text(TweetHtmlContentValue + DefaultTags);
@@ -1054,7 +1068,13 @@ public class stepDefinition {
                         Message.RecipientType.TO,
                         InternetAddress.parse("prakash.rsingh04@gmail.com")
                 );
-                message.setSubject("RedNEWS Status");
+
+                if(SubCategory.equals("Actress")){
+                    message.setSubject("PinkStarVibes Status");
+                }
+                else if(SubCategory.equals("Cricket")){
+                message.setSubject("RedNews Status");}
+
                 message.setText("Total Insta Post Published: " + instaPostCount +
                         "\n");
 
@@ -1067,7 +1087,7 @@ public class stepDefinition {
             }
         }
 
-        System.out.println("Total Blog Post Published: "+blogPostCount);
+//        System.out.println("Total Blog Post Published: "+blogPostCount);
         System.out.println("Total Insta Post Published: "+instaPostCount);
         driver.close();
         driver.switchTo().window(InstagramTab);
